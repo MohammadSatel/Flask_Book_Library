@@ -1,0 +1,9 @@
+/* Example styles */
+body {
+    background-color: darkgray;
+    font-family: Arial, sans-serif;
+}
+h1 {
+    color: aqua;
+    background-color: chocolate;
+}

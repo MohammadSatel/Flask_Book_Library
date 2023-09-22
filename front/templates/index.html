@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask App</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+
+</head>
+<body>
+    <h1>Book Library</h1>
+
+    <a href="/">Homepage</a> 
+    <a href="/books">Books</a>
+    <a href="/customers">Customers</a>
+    <a href="/loans">Loans</a>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
