@@ -1,7 +1,6 @@
 from flask import Flask, render_template
 import os
 import logging
-import os
 
 logging.basicConfig(filename=os.path.join(os.path.dirname(__file__), 'app.log'), level=logging.DEBUG)
 
