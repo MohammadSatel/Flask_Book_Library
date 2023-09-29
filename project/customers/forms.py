@@ -7,5 +7,5 @@ from wtforms.validators import DataRequired
 # variable_name = Field_type('Label that will show', validators=[V_func1(), V_func2(),...])
 class CreateCustomer(FlaskForm):
     name = StringField('customer name', validators=[DataRequired()])
-    id = TextAreaField('customer id')
+    last = TextAreaField('customer last')
     submit = SubmitField('create customer')
