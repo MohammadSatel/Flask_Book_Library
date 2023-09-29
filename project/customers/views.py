@@ -5,6 +5,7 @@ from project import db,app
 from project.customers.models import Customer
 from project.customers.forms import CreateCustomer
 
+
 # image upload
 from distutils.log import debug
 import os
@@ -12,8 +13,11 @@ from flask import  flash, request
 from werkzeug.utils import secure_filename
 from flask import send_from_directory
 
-
 customers = Blueprint('customers', __name__, template_folder='templates',url_prefix='/customers')
+
+@customers.route('/customers')
+def index():
+    return render_template('customers.html')
 
 # UPLOAD_FOLDER = 'UPLOAD_FOLDER'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
@@ -32,7 +36,6 @@ def upload_file():
     if request.method == 'POST':
         # print( request.form.get("author"))
         
-
         
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -88,26 +91,3 @@ def list_customers():
     #     res.append({x.name: x.description})
     # return json.dumps(res)
     return render_template('customers.html', stu_list=stu_list)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-from flask import render_template, Blueprint
-
-customers = Blueprint('customers', __name__, template_folder='templates')
-
-@customers.route('/customers')
-def index():
-    return render_template('customers.html')
