@@ -49,8 +49,8 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            student = customers(name=request.form.get("stdent_name"),age=request.form.get("age"),img=filename)
-            db.session.add(student)
+            customer = customers(name=request.form.get("stdent_name"),age=request.form.get("age"),img=filename)
+            db.session.add(customer)
             db.session.commit()
             print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -60,7 +60,7 @@ def upload_file():
 
 
 
-# add a new student
+# add a new customer
 
 @customers.route('/test', methods=['GET'])
 def test():
