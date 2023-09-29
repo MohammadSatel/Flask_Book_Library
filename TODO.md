@@ -1,4 +1,7 @@
-Running on - http://127.0.0.1:5000
+# Running on - http://127.0.0.1:5000
+
+
+# BACK
 
 Create project folder - V
 Create README.MD - V
@@ -7,27 +10,37 @@ Create virtual environment - V
 Activate virtual environment - V
 Check pip list - V
 Install needed packages - V
-pip freeze > requirements.txt - V
+Pip freeze > requirements.txt - V
 Create .gitignore - V
-Add /.venv to .gitignore - V
+Add needed files to .gitignore - V
 Create git - V
-Create project folders (front,back) - V
-Create project files - V
-Create basic app.py with flask - V
-Connect flask with front folders - V
-Create basic html pages - V
-Create styles.css - V
-Create script.js - V 
-Connect html pages with css - V
-Connect html pages with js - V
-Create routes for html pages in flask - V
-Link html pages together - V
-Add logger - V
-Add pychache to .gitignore - V
-Add lists (books, customers, loans) - 
-Create database file -
-Create CRUD routes for book list - 
-Create CRUD routes for customers list - 
-Create CRUD routes for loans list - 
+Create project folders (folder structure) - V
+Create project files (folder structure) - V
+Add logging - 
+Configure logging messeges -
+Create route for core (index.html) - 
+Create route for books (books.html) -
+Create route for customers (customers.html) - 
+Create route for books (loans.html) - 
+Create database (model) for books -
+Create database (model) for customers - 
+Create database (model) for loans - 
+Create forms for books -
+Create forms for customers -
+Create forms for loans -
+Create CRUD routes for book - 
+Create CRUD routes for customers - 
+Create CRUD routes for loans - 
 
 
+# FRONT
+
+Modify html  -
+Modify styles.css - 
+Modify script.js -
+Link html pages together -
+Link css to html -
+Link js to html -
+Create CRUD buttons (js onclick) -
+Get data from database.db -
+Save data after calling functions -
