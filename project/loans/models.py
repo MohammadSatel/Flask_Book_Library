@@ -1,11 +1,24 @@
-#form imports
-from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField
-from wtforms.validators import DataRequired
+from project import db, app
 
-# Flask forms (wtforms) allow you to easily create forms in format:
-# variable_name = Field_type('Label that will show', validators=[V_func1(), V_func2(),...])
-class CreateLoan(FlaskForm):
-    name = StringField('loan name', validators=[DataRequired()])
-    time = TextAreaField('loan time')
-    submit = SubmitField('create loan')
+
+class Loan(db.Model):
+
+    __tablename__ = 'Loans'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True, index=True)
+    author = db.Column(db.String(500))
+
+    # initialise an instance (row) of a table/entity
+    def __init__(self, name, author):
+        self.name = name
+        self.author = author
+
+    # __repr__ is used to represent an instance, such as for print() function
+
+    def __repr__(self):
+        return f"Name: {self.name}"
+
+
+with app.app_context():
+    db.create_all()
