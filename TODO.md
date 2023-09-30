@@ -31,7 +31,8 @@ Create forms for loans -
 Create CRUD routes for book - 
 Create CRUD routes for customers - 
 Create CRUD routes for loans - 
-
+Get data from database.db -
+Save data after calling functions -
 
 # FRONT
 
