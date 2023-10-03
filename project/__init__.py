@@ -1,10 +1,12 @@
 import os
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
 # DATABASE SETUP
 app = Flask(__name__)
+app.static_folder = 'static'
+
 # to allow us to use forms, not safe for deployment
 app.config['SECRET_KEY'] = 'supersecret'
 app.config["TEMPLATES_AUTO_RELOAD"] = True
