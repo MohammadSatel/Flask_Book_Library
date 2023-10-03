@@ -1,7 +1,7 @@
 from flask import render_template, Blueprint
 from project.books.models import Book
 
-books = Blueprint('books', __name__, template_folder='templates')
+books = Blueprint('books', __name__, template_folder='templates', static_folder='static')
 
 @books.route('/books')
 def index():

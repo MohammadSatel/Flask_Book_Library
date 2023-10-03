@@ -1,9 +1,9 @@
-from flask import render_template, Blueprint
+from flask import render_template, Blueprint, current_app
 
-loans = Blueprint('loans', __name__, template_folder='templates')
+customers = Blueprint('customers', __name__, template_folder='templates', static_folder='static')
 
-@loans.route('/loans')
+@customers.route('/customers')
 def index():
-    return render_template('loans.html')
+    return render_template('customers.html')
 
-## CRUD FOR LOANS
+# You don't need to run the app here, just define the blueprint
