@@ -1,10 +1,9 @@
 from flask import render_template, Blueprint
 
+loans = Blueprint('loans', __name__, template_folder='templates')
 
-customers = Blueprint('customers', __name__, template_folder='templates')
-
-@customers.route('/customers')
+@loans.route('/loans')
 def index():
-    return render_template('customers.html')  # - BUGG, CANT ACCESS CUSTOMERS.HTML. THUNDER "GET" WORKS,  FIXED (CLEAR CACHE OMG)
+    return render_template('loans.html')
 
-## CRUD FOR CURSOMERS
+## CRUD FOR LOANS
