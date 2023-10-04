@@ -3,11 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
-
-    <title>Books</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <title>Books CRUD</title>
 </head>
 <body>
-    <h1>BOOOOOOKS </h1>
+    <div class="container">
+        <h1 class="my-4">Books</h1>
+
+        <!-- Link to create a new book -->
+        <a href="/books/create" class="btn btn-success">Add New Book</a>
+
+        <!-- Search box -->
+        
+        <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search for books..">
+
+        <!-- Table to list books -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Author</th>
+                    <th>Time</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Loop through books and display each book -->
+                {% for book in books %}
+                    <tr>
+                        <td>{{ book.name }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.time }}</td>
+                        <td>
+                            <a href="#" class="btn btn-warning btn-sm">Edit</a>
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+    </div>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <!-- Link to your external JavaScript file -->
+    <script src="{{ url_for('static', filename='js/books.js') }}"></script>
 </body>
 </html>
