@@ -3,7 +3,7 @@ from project import db, app
 
 class Customer(db.Model):
 
-    __tablename__ = 'Customers'
+    __tablename__ = 'customers'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True, index=True)
