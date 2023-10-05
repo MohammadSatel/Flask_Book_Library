@@ -16,5 +16,6 @@ class Customer(db.Model):
     def __repr__(self):
         return f"Customer(ID: {self.id}, Name: {self.name}, City: {self.city}, Age: {self.age})"
 
+
 with app.app_context():
     db.create_all()

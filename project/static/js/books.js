@@ -64,3 +64,51 @@ $(document).ready(function() {
         });
     });
 });
+
+function editBook(bookId) {
+    const name = $('#edit_name').val();
+    const author = $('#edit_author').val();
+    const yearPublished = $('#edit_year_published').val();
+    const bookType = $('#edit_book_type').val();
+
+    // Create a data object to send as JSON
+    const data = {
+        name: name,
+        author: author,
+        year_published: yearPublished,
+        book_type: bookType
+    };
+
+    $.ajax({
+        url: `/books/${bookId}/edit`,
+        method: 'POST',
+        contentType: 'application/json',  // Set content type to JSON
+        data: JSON.stringify(data),  // Send data as JSON
+        success: function(response) {
+            console.log('Success:', response);
+            alert('Book updated successfully!');
+            $('#editBookModal').modal('hide');
+            location.reload();
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            console.log('Error:', errorThrown);
+            alert('Error updating book: ' + errorThrown);
+        }
+    });
+}
+
+function deleteBook(bookId) {
+    $.ajax({
+        url: `/books/${bookId}/delete`,
+        method: 'POST',
+        success: function(response) {
+            console.log('Success:', response);
+            alert('Book deleted successfully!');
+            location.reload();
+        },
+        error: function(error) {
+            console.log('Error:', error);
+            alert('Error deleting book: ' + error.responseJSON.error);
+        }
+    });
+}

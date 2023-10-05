@@ -42,25 +42,34 @@ def create_book():
 # Route to update an existing book
 @books.route('/<int:book_id>/edit', methods=['POST'])
 def edit_book(book_id):
+    # Get the book with the given ID
     book = Book.query.get(book_id)
+    
+    # Check if the book exists
     if not book:
         return jsonify({'error': 'Book not found'}), 404
 
-    data = request.form
-    book.name = data['name']
-    book.author = data['author']
-    book.year_published = data['year_published']
-    book.book_type = data['book_type']
-
-
     try:
-        # Update the book in the database
+        # Get data from the request as JSON
+        data = request.get_json()
+        
+        # Update book details
+        book.name = data.get('name', book.name)  # Update if data exists, otherwise keep the same
+        book.author = data.get('author', book.author)
+        book.year_published = data.get('year_published', book.year_published)
+        book.book_type = data.get('book_type', book.book_type)
+        
+        # Commit the changes to the database
         db.session.commit()
-        return redirect(url_for('books.list_books'))
+        
+        return jsonify({'message': 'Book updated successfully'})
     except Exception as e:
-        # Handle any exceptions, such as database errors
+        # Handle any exceptions
         db.session.rollback()
         return jsonify({'error': f'Error updating book: {str(e)}'}), 500
+
+
+
 
 # Route to delete a book
 @books.route('/<int:book_id>/delete', methods=['POST'])
