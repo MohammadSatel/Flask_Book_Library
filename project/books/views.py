@@ -69,6 +69,25 @@ def edit_book(book_id):
         return jsonify({'error': f'Error updating book: {str(e)}'}), 500
 
 
+# New route to fetch existing book data for editing
+@books.route('/<int:book_id>/edit-data', methods=['GET'])
+def get_book_for_edit(book_id):
+    # Get the book with the given ID
+    book = Book.query.get(book_id)
+    
+    # Check if the book exists
+    if not book:
+        return jsonify({'success': False, 'error': 'Book not found'}), 404
+
+    # Create a dictionary representing the book data
+    book_data = {
+        'name': book.name,
+        'author': book.author,
+        'year_published': book.year_published,
+        'book_type': book.book_type
+    }
+    
+    return jsonify({'success': True, 'book': book_data})
 
 
 # Route to delete a book

@@ -66,36 +66,79 @@ $(document).ready(function() {
 });
 
 function editBook(bookId) {
-    const name = $('#edit_name').val();
-    const author = $('#edit_author').val();
-    const yearPublished = $('#edit_year_published').val();
-    const bookType = $('#edit_book_type').val();
+    console.log('Edit button clicked for book ID:', bookId);
 
-    // Create a data object to send as JSON
-    const data = {
-        name: name,
-        author: author,
-        year_published: yearPublished,
-        book_type: bookType
-    };
-
+    // Fetch the existing book data for the given bookId via an AJAX request
     $.ajax({
-        url: `/books/${bookId}/edit`,
-        method: 'POST',
-        contentType: 'application/json',  // Set content type to JSON
-        data: JSON.stringify(data),  // Send data as JSON
+        url: `/books/${bookId}/edit-data`,
+        method: 'GET',
         success: function(response) {
             console.log('Success:', response);
-            alert('Book updated successfully!');
-            $('#editBookModal').modal('hide');
-            location.reload();
+
+            if (response.success) {
+                const bookData = response.book;
+
+                // Pre-fill the modal form fields with the existing book data
+                $('#edit_name').val(bookData.name);
+                $('#edit_author').val(bookData.author);
+                $('#edit_year_published').val(bookData.year_published);
+                $('#edit_book_type').val(bookData.book_type);
+
+                // Show the modal for editing
+                $('#editBookModal').modal('show');
+            } else {
+                console.log('Error:', response.error);
+                alert('Error fetching book data: ' + response.error);
+            }
         },
         error: function(xhr, textStatus, errorThrown) {
             console.log('Error:', errorThrown);
-            alert('Error updating book: ' + errorThrown);
+            alert('Error fetching book data: ' + errorThrown);
         }
     });
 }
+$(document).ready(function() {
+    // Event listener for the edit form submission
+    $('#editBookForm').submit(function(event) {
+        event.preventDefault();  // Prevent the default form submission
+
+        // Get form data
+        const name = $('#edit_name').val();
+        const author = $('#edit_author').val();
+        const yearPublished = $('#edit_year_published').val();
+        const bookType = $('#edit_book_type').val();
+
+        // Create a data object to send as JSON
+        const data = {
+            'name': name,
+            'author': author,
+            'year_published': yearPublished,
+            'book_type': bookType
+        };
+
+        // Send an AJAX request to update the book data
+        $.ajax({
+            url: `/books/${bookId}/edit`,
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(response) {
+                console.log('Success:', response);
+                alert('Book updated successfully!');
+                $('#editBookModal').modal('hide');
+                location.reload();
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                console.log('Error:', errorThrown);
+                alert('Error updating book: ' + errorThrown);
+            }
+        });
+    });
+});
+
+
+
+
 
 function deleteBook(bookId) {
     $.ajax({
