@@ -18,8 +18,8 @@ def list_books():
 def list_books_json():
     # Fetch all books from the database and convert to JSON
     books = Book.query.all()
-    # Create a list of dictionaries representing each book
-    book_list = [{'name': book.name, 'author': book.author, 'time': book.time} for book in books]
+    # Create a list of dictionaries representing each book with the required fields
+    book_list = [{'name': book.name, 'author': book.author, 'year_published': book.year_published, 'book_type': book.book_type} for book in books]
     return jsonify(books=book_list)
 
 @books.route('/create', methods=['POST', 'GET'])
@@ -58,7 +58,9 @@ def edit_book(book_id):
     data = request.form
     book.name = data['name']
     book.author = data['author']
-    book.time = data['time']
+    book.year_published = data['year_published']
+    book.book_type = data['book_type']
+
 
     try:
         # Update the book in the database

@@ -3,7 +3,6 @@ from project import db, app
 
 class Book(db.Model):
     __tablename__ = 'books'
-
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True, index=True)
     author = db.Column(db.String(64))
