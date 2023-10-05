@@ -3,11 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <title>Customers</title>
 </head>
 <body>
-    <h1>CUSTOMERS </h1>
+    <div class="container">
+        <h1 class="my-4">Customers</h1>
+
+        <!-- Link to trigger modal -->
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addCustomerModal">
+            Add New Customer
+        </button>
+
+        <!-- Search box -->
+        <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search for customers..">
+
+        <!-- Table to list customers -->
+        <table class="table table-bordered">
+            <!-- Table header -->
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Author</th>
+                    <th>Time</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <!-- Table body -->
+            <tbody>
+                <!-- Loop through customers and display each customer -->
+                {% for customer in customers %}
+                    <tr>
+                        <td>{{ customer.name }}</td>
+                        <td>{{ customer.author }}</td>
+                        <td>{{ customer.time }}</td>
+                        <td>
+                            <a href="#" class="btn btn-warning btn-sm">Edit</a>
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <!-- Link to external JavaScript file -->
+    <script src="{{ url_for('static', filename='js/customers.js') }}"></script>
+
+    <!-- Add Customer Modal -->
+    <div class="modal fade" id="addCustomerModal" tabindex="-1" role="dialog" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCustomerModalLabel">Add New Customer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Add Customer Form -->
+                    <form id="addCustomerForm">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Enter customer name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="author">Author</label>
+                            <input type="text" class="form-control" id="author" placeholder="Enter author name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="time">Time</label>
+                            <input type="text" class="form-control" id="time" placeholder="Enter customer time" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add customer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
