@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-
 <div class="container">
     <h1 class="my-4">Customers</h1>
 
@@ -20,8 +18,8 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Author</th>
-                <th>Time</th>
+                <th>City</th> <!-- Changed from 'Author' to 'City' -->
+                <th>Age</th>  <!-- Added 'Age' -->
                 <th>Actions</th>
             </tr>
         </thead>
@@ -31,8 +29,8 @@
             {% for customer in customers %}
             <tr>
                 <td>{{ customer.name }}</td>
-                <td>{{ customer.author }}</td>
-                <td>{{ customer.time }}</td>
+                <td>{{ customer.city }}</td>  <!-- Display 'city' instead of 'author' -->
+                <td>{{ customer.age }}</td>  <!-- Display 'age' -->
                 <td>
                     <a href="#" class="btn btn-warning btn-sm">Edit</a>
                     <button class="btn btn-danger btn-sm">Delete</button>
@@ -47,7 +45,7 @@
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-<!-- Add this before including your books.js -->
+<!-- Add this before including your customers.js -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!-- Link to external JavaScript file -->
@@ -72,17 +70,18 @@
                         <input type="text" class="form-control" id="name" placeholder="Enter customer name" required>
                     </div>
                     <div class="form-group">
-                        <label for="author">Author</label>
-                        <input type="text" class="form-control" id="author" placeholder="Enter author name" required>
+                        <label for="city">City</label>
+                        <input type="text" class="form-control" id="city" placeholder="Enter city" required>
                     </div>
                     <div class="form-group">
-                        <label for="time">Time</label>
-                        <input type="text" class="form-control" id="time" placeholder="Enter customer time" required>
+                        <label for="age">Age</label>
+                        <input type="number" class="form-control" id="age" placeholder="Enter age" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Add customer</button>
+                    <button type="submit" class="btn btn-primary">Add Customer</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}

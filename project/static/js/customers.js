@@ -31,8 +31,8 @@ $(document).ready(function() {
 
         // Get form data
         const name = $('#name').val();
-        const author = $('#author').val();
-        const time = $('#time').val();
+        const city = $('#city').val(); // Updated to get city from the form
+        const age = $('#age').val(); // Updated to get age from the form
 
         // Send an AJAX request to create a new customer
         $.ajax({
@@ -40,8 +40,8 @@ $(document).ready(function() {
             method: 'POST',
             data: {
                 name: name,
-                author: author,
-                time: time
+                city: city, // Updated to send 'city'
+                age: age // Updated to send 'age'
             },
             success: function(response) {
                 console.log('Success:', response);
