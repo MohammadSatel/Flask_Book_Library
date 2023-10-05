@@ -44,6 +44,7 @@ $(document).ready(function() {
                 time: time
             },
             success: function(response) {
+                console.log('Success:', response);
                 // Display a success notification
                 alert('Book added successfully!');
 
@@ -54,6 +55,7 @@ $(document).ready(function() {
                 location.reload();
             },
             error: function(error) {
+                console.log('Error:', error);
                 // Display an error notification
                 alert('Error adding book: ' + error.responseJSON.error);
             }
