@@ -1,0 +1,30 @@
+body {
+    background-color: aquamarine;
+    color: blue;
+    padding: 20px;
+
+}
+h1 {
+    background-color: brown;
+    color: yellowgreen;
+}
+/* Add any custom CSS styles you want to apply */
+body {
+    padding-top: 20px;
+}
+
+/* Optional: Add styles for your form or customize as needed */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+/* Optional: Add styles for the table or customize as needed */
+.table {
+    margin-bottom: 1rem;
+}
+
+/* Optional: Add styles for buttons or customize as needed */
+.btn {
+    margin-right: 5px;
+
+}
