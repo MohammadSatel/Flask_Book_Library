@@ -1,3 +1,21 @@
+
+
+// Event listener for edit button
+$(document).on('click', '.edit-book-btn', function() {
+    const bookId = $(this).data('book-id');
+    const book = findBookById(bookId);
+
+    // Populate the edit modal with book details
+    $('#edit_name').val(book.name);
+    $('#edit_author').val(book.author);
+    $('#edit_time').val(book.time);
+    $('#edit_book_id').val(bookId);
+
+    // Show the edit modal
+    $('#editBookModal').modal('show');
+});
+
+
 // Function to handle search
 function searchBooks() {
     let input, filter, table, tr, td, i, j, txtValue;

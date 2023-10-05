@@ -24,7 +24,7 @@ function searchCustomers() {
 // Event listener for search input
 document.getElementById("searchInput").addEventListener("input", searchCustomers);
 
-// Handle form submission for adding a new customers
+// Handle form submission for adding a new customer
 $(document).ready(function() {
     $('#addCustomerForm').submit(function(event) {
         event.preventDefault();  // Prevent the default form submission
@@ -34,7 +34,7 @@ $(document).ready(function() {
         const author = $('#author').val();
         const time = $('#time').val();
 
-        // Send an AJAX request to create a new customers
+        // Send an AJAX request to create a new customer
         $.ajax({
             url: '/customers/create',
             method: 'POST',
@@ -44,6 +44,7 @@ $(document).ready(function() {
                 time: time
             },
             success: function(response) {
+                console.log('Success:', response);
                 // Display a success notification
                 alert('Customer added successfully!');
 
@@ -54,6 +55,7 @@ $(document).ready(function() {
                 location.reload();
             },
             error: function(error) {
+                console.log('Error:', error);
                 // Display an error notification
                 alert('Error adding customer: ' + error.responseJSON.error);
             }
