@@ -4,21 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <title>Books CRUD</title>
+    <title>Books</title>
 </head>
 <body>
     <div class="container">
         <h1 class="my-4">Books</h1>
 
-        <!-- Link to create a new book -->
-        <a href="/books/create" class="btn btn-success">Add New Book</a>
+        <!-- Link to trigger modal -->
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addBookModal">
+            Add New Book
+        </button>
 
         <!-- Search box -->
-        
         <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search for books..">
 
         <!-- Table to list books -->
         <table class="table table-bordered">
+            <!-- Table header -->
             <thead>
                 <tr>
                     <th>Name</th>
@@ -27,6 +29,7 @@
                     <th>Actions</th>
                 </tr>
             </thead>
+            <!-- Table body -->
             <tbody>
                 <!-- Loop through books and display each book -->
                 {% for book in books %}
@@ -42,15 +45,45 @@
                 {% endfor %}
             </tbody>
         </table>
-
-
     </div>
 
     <!-- Bootstrap JavaScript -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-    <!-- Link to your external JavaScript file -->
+    <!-- Link to external JavaScript file -->
     <script src="{{ url_for('static', filename='js/books.js') }}"></script>
+
+    <!-- Add Book Modal -->
+    <div class="modal fade" id="addBookModal" tabindex="-1" role="dialog" aria-labelledby="addBookModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addBookModalLabel">Add New Book</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Add Book Form -->
+                    <form id="addBookForm">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Enter book name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="author">Author</label>
+                            <input type="text" class="form-control" id="author" placeholder="Enter author name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="time">Time</label>
+                            <input type="text" class="form-control" id="time" placeholder="Enter book time" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Book</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

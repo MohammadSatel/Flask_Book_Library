@@ -23,3 +23,40 @@ function searchBooks() {
 
 // Event listener for search input
 document.getElementById("searchInput").addEventListener("input", searchBooks);
+
+// Handle form submission for adding a new book
+$(document).ready(function() {
+    $('#addBookForm').submit(function(event) {
+        event.preventDefault();  // Prevent the default form submission
+
+        // Get form data
+        const name = $('#name').val();
+        const author = $('#author').val();
+        const time = $('#time').val();
+
+        // Send an AJAX request to create a new book
+        $.ajax({
+            url: '/books/create',
+            method: 'POST',
+            data: {
+                name: name,
+                author: author,
+                time: time
+            },
+            success: function(response) {
+                // Display a success notification
+                alert('Book added successfully!');
+
+                // Close the modal
+                $('#addBookModal').modal('hide');
+
+                // Reload the page to show the updated book list
+                location.reload();
+            },
+            error: function(error) {
+                // Display an error notification
+                alert('Error adding book: ' + error.responseJSON.error);
+            }
+        });
+    });
+});

@@ -21,7 +21,7 @@ def list_books_json():
     return jsonify(books=book_list)
 
 # Route to create a new book
-@books.route('/create', methods=['POST'])
+@books.route('/create', methods=['POST','GET'])
 def create_book():
     data = request.form
 
