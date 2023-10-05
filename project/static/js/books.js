@@ -32,11 +32,8 @@ $(document).ready(function() {
         // Get form data
         const name = $('#name').val();
         const author = $('#author').val();
-        const yearPublished = $('#year_published').val();  // New field: Year Published
-        const bookType = $('#book_type').val();  // New field: Book Type
-
-        // Log the form data to check if it's being collected correctly
-        console.log('Form data:', { name, author, yearPublished, bookType });
+        const year_published = $('#year_published').val();  // New field: Year Published
+        const book_type = $('#book_type').val();  // New field: Book Type
 
         // Send an AJAX request to create a new book
         $.ajax({
@@ -45,8 +42,8 @@ $(document).ready(function() {
             data: {
                 name: name,
                 author: author,
-                year_published: yearPublished,
-                book_type: bookType
+                year_published: year_published,
+                book_type: book_type
             },
             success: function(response) {
                 console.log('Success:', response);

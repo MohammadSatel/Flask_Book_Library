@@ -24,29 +24,20 @@ def list_books_json():
 
 @books.route('/create', methods=['POST', 'GET'])
 def create_book():
-    # Create an instance of the CreateBook form using request.form
-    form = CreateBook(request.form)
+    data = request.form
 
-    if form.validate_on_submit():
-        name = form.name.data
-        author = form.author.data
-        year_published = form.year_published.data
-        book_type = form.book_type.data
+    new_book = Book(name=data['name'], author=data['author'], year_published=data['year_published'], book_type=data['book_type'])
 
-        # Create a new book with the form data
-        new_book = Book(name=name, author=author, year_published=year_published, book_type=book_type)
+    try:
+        # Add the new book to the session and commit to save to the database
+        db.session.add(new_book)
+        db.session.commit()
+        return redirect(url_for('books.list_books'))
+    except Exception as e:
+        # Handle any exceptions, such as database errors
+        db.session.rollback()
+        return jsonify({'error': f'Error creating book: {str(e)}'}), 500
 
-        try:
-            # Add the new book to the session and commit to save to the database
-            db.session.add(new_book)
-            db.session.commit()
-            return redirect(url_for('books.list_books'))
-        except Exception as e:
-            # Handle any exceptions, such as database errors
-            db.session.rollback()
-            return jsonify({'error': f'Error creating book: {str(e)}'}), 500
-
-    return render_template('books.html', form=form)
 
 # Route to update an existing book
 @books.route('/<int:book_id>/edit', methods=['POST'])
