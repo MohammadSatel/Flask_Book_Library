@@ -2,7 +2,6 @@
 
 {% block content %}
 
-
 <div class="container">
     <h1 class="my-4">Books</h1>
 
@@ -21,7 +20,8 @@
             <tr>
                 <th>Name</th>
                 <th>Author</th>
-                <th>Time</th>
+                <th>Year Published</th> <!-- New field: Year Published -->
+                <th>Type</th> <!-- New field: Type -->
                 <th>Actions</th>
             </tr>
         </thead>
@@ -32,7 +32,8 @@
             <tr>
                 <td>{{ book.name }}</td>
                 <td>{{ book.author }}</td>
-                <td>{{ book.time }}</td>
+                <td>{{ book.year_published }}</td> <!-- Display Year Published -->
+                <td>{{ book.book_type }}</td> <!-- Display Book Type -->
                 <td>
                     <a href="#" class="btn btn-warning btn-sm">Edit</a>
                     <button class="btn btn-danger btn-sm">Delete</button>
@@ -76,8 +77,12 @@
                         <input type="text" class="form-control" id="author" placeholder="Enter author name" required>
                     </div>
                     <div class="form-group">
-                        <label for="time">Time</label>
-                        <input type="text" class="form-control" id="time" placeholder="Enter book time" required>
+                        <label for="year_published">Year Published</label> <!-- New field: Year Published -->
+                        <input type="text" class="form-control" id="year_published" placeholder="Enter year published" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="book_type">Type</label> <!-- New field: Type -->
+                        <input type="text" class="form-control" id="book_type" placeholder="Enter book type" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Add Book</button>
                 </form>

@@ -1,7 +1,6 @@
-
-
 // Event listener for edit button
 $(document).on('click', '.edit-book-btn', function() {
+    // This function is triggered when an 'edit' button is clicked for a book
     const bookId = $(this).data('book-id');
     const book = findBookById(bookId);
 
@@ -15,9 +14,9 @@ $(document).on('click', '.edit-book-btn', function() {
     $('#editBookModal').modal('show');
 });
 
-
 // Function to handle search
 function searchBooks() {
+    // This function is triggered when the search input changes
     let input, filter, table, tr, td, i, j, txtValue;
     input = document.getElementById("searchInput");
     filter = input.value.toLowerCase();
@@ -44,13 +43,17 @@ document.getElementById("searchInput").addEventListener("input", searchBooks);
 
 // Handle form submission for adding a new book
 $(document).ready(function() {
+    // This function is executed when the document is ready (loaded)
+
+    // Event listener for form submission
     $('#addBookForm').submit(function(event) {
         event.preventDefault();  // Prevent the default form submission
 
         // Get form data
         const name = $('#name').val();
         const author = $('#author').val();
-        const time = $('#time').val();
+        const yearPublished = $('#year_published').val();  // New field: Year Published
+        const bookType = $('#book_type').val();  // New field: Book Type
 
         // Send an AJAX request to create a new book
         $.ajax({
@@ -59,9 +62,11 @@ $(document).ready(function() {
             data: {
                 name: name,
                 author: author,
-                time: time
+                year_published: yearPublished,
+                book_type: bookType
             },
             success: function(response) {
+                // This function is executed if the AJAX request is successful
                 console.log('Success:', response);
                 // Display a success notification
                 alert('Book added successfully!');
@@ -73,6 +78,7 @@ $(document).ready(function() {
                 location.reload();
             },
             error: function(error) {
+                // This function is executed if the AJAX request encounters an error
                 console.log('Error:', error);
                 // Display an error notification
                 alert('Error adding book: ' + error.responseJSON.error);
