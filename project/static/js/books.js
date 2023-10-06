@@ -24,6 +24,7 @@ function searchBooks() {
 // Event listener for search input
 document.getElementById("searchInput").addEventListener("input", searchBooks);
 
+
 // Handle form submission for adding a new book
 $(document).ready(function() {
     $('#addBookForm').submit(function(event) {
@@ -65,6 +66,7 @@ $(document).ready(function() {
     });
 });
 
+// EDIT BOOK
 function editBook(bookId) {
     console.log('Edit button clicked for book ID:', bookId);
 
@@ -84,6 +86,9 @@ function editBook(bookId) {
                 $('#edit_year_published').val(bookData.year_published);
                 $('#edit_book_type').val(bookData.book_type);
 
+                // Store the bookId in a data attribute of the save button
+                $('#saveEditBookButton').attr('data-book-id', bookId);
+
                 // Show the modal for editing
                 $('#editBookModal').modal('show');
             } else {
@@ -97,49 +102,46 @@ function editBook(bookId) {
         }
     });
 }
-$(document).ready(function() {
-    // Event listener for the edit form submission
-    $('#editBookForm').submit(function(event) {
-        event.preventDefault();  // Prevent the default form submission
 
-        // Get form data
-        const name = $('#edit_name').val();
-        const author = $('#edit_author').val();
-        const yearPublished = $('#edit_year_published').val();
-        const bookType = $('#edit_book_type').val();
+// Event listener for the edit form submission
+$('#saveEditBookButton').click(function(event) {
+    const bookId = $(this).attr('data-book-id');
 
-        // Create a data object to send as JSON
-        const data = {
-            'name': name,
-            'author': author,
-            'year_published': yearPublished,
-            'book_type': bookType
-        };
+    // Get form data
+    const name = $('#edit_name').val();
+    const author = $('#edit_author').val();
+    const yearPublished = $('#edit_year_published').val();
+    const bookType = $('#edit_book_type').val();
 
-        // Send an AJAX request to update the book data
-        $.ajax({
-            url: `/books/${bookId}/edit`,
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(data),
-            success: function(response) {
-                console.log('Success:', response);
-                alert('Book updated successfully!');
-                $('#editBookModal').modal('hide');
-                location.reload();
-            },
-            error: function(xhr, textStatus, errorThrown) {
-                console.log('Error:', errorThrown);
-                alert('Error updating book: ' + errorThrown);
-            }
-        });
+    // Create a data object to send as JSON
+    const data = {
+        'name': name,
+        'author': author,
+        'year_published': yearPublished,
+        'book_type': bookType
+    };
+
+    // Send an AJAX request to update the book data
+    $.ajax({
+        url: `/books/${bookId}/edit`,
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function(response) {
+            console.log('Success:', response);
+            alert('Book updated successfully!');
+            $('#editBookModal').modal('hide');
+            location.reload();
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            console.log('Error:', errorThrown);
+            alert('Error updating book: ' + errorThrown);
+        }
     });
 });
 
 
-
-
-
+// DEL BOOK
 function deleteBook(bookId) {
     $.ajax({
         url: `/books/${bookId}/delete`,
