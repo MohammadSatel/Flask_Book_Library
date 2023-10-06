@@ -1,64 +1,101 @@
-// Function to handle search
-function searchLoans() {
-    let input, filter, table, tr, td, i, j, txtValue;
-    input = document.getElementById("searchInput");
-    filter = input.value.toLowerCase();
-    table = document.querySelector(".table");
-    tr = table.getElementsByTagName("tr");
-    for (i = 1; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td");
-        let rowDisplay = false;  // Flag to determine if this row should be displayed
-        for (j = 0; j < td.length; j++) {
-            if (td[j]) {
-                txtValue = td[j].textContent || td[j].innerText;
-                if (txtValue.toLowerCase().indexOf(filter) > -1) {
-                    rowDisplay = true;  // Display the row if any cell matches the search
-                    break;
-                }
-            }
+// Function to populate book and customer dropdowns
+function populateDropdowns() {
+    // Fetch book names and populate the book dropdown
+    $.ajax({
+        url: '/books/json',
+        method: 'GET',
+        success: function(response) {
+            const books = response.books;
+            const bookDropdown = $('#book_name');
+
+            bookDropdown.empty();  // Clear previous options
+
+            // Populate options
+            books.forEach(function(book) {
+                bookDropdown.append($('<option>').val(book.name).text(book.name));
+            });
+        },
+        error: function(error) {
+            console.error('Error fetching book names: ', error);
         }
-        tr[i].style.display = rowDisplay ? "" : "none";  // Show or hide the row
-    }
+    });
+
+    // Fetch customer names and populate the customer dropdown
+    $.ajax({
+        url: '/customers/json',
+        method: 'GET',
+        success: function(response) {
+            const customers = response.customers;
+            const customerDropdown = $('#customer_name');
+
+            customerDropdown.empty();  // Clear previous options
+
+            // Populate options
+            customers.forEach(function(customer) {
+                customerDropdown.append($('<option>').val(customer.name).text(customer.name));
+            });
+        },
+        error: function(error) {
+            console.error('Error fetching customer names: ', error);
+        }
+    });
 }
 
-// Event listener for search input
-document.getElementById("searchInput").addEventListener("input", searchLoans);
+// Function to fetch book details based on the selected book name
+function fetchBookDetails(bookName) {
+    return $.ajax({
+        url: `/books/details/${bookName}`, // Modify the URL to match your endpoint for fetching book details
+        method: 'GET',
+    });
+}
 
 // Handle form submission for adding a new Loan
 $(document).ready(function() {
+    // Populate dropdowns when the page loads
+    populateDropdowns();
+
     $('#addLoanForm').submit(function(event) {
         event.preventDefault();  // Prevent the default form submission
 
         // Get form data
-        const customer_name = $('#customer_name').val();
-        const book_name = $('#book_name').val();
-        const loan_date = $('#loan_date').val();
-        const return_date = $('#return_date').val();
+        const formData = {
+            customer_name: $('#customer_name').val(),
+            book_name: $('#book_name').val(),
+            loan_date: $('#loan_date').val(),
+            return_date: $('#return_date').val()
+        };
 
-        // Send an AJAX request to create a new Loan
-        $.ajax({
-            url: '/loans/create',
-            method: 'POST',
-            data: {
-                customer_name: customer_name,
-                book_name: book_name,
-                loan_date: loan_date,
-                return_date: return_date
-            },
-            success: function(response) {
-                // Display a success notification
-                alert('Loan added successfully!');
+        const bookName = formData.book_name;
 
-                // Close the modal
-                $('#addLoanModal').modal('hide');
+        // Fetch book details based on the selected book name
+        fetchBookDetails(bookName)
+            .then(function(bookDetails) {
+                // Include book details in the form data
+                formData.book_details = bookDetails;
 
-                // Reload the page to show the updated Loan list
-                location.reload();
-            },
-            error: function(error) {
-                // Display an error notification
-                alert('Error adding loan: ' + error.responseJSON.error);
-            }
-        });
+                // Send an AJAX request to create a new Loan
+                $.ajax({
+                    url: '/loans/create',
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        // Display a success notification
+                        alert('Loan added successfully!');
+
+                        // Close the modal
+                        $('#addLoanModal').modal('hide');
+
+                        // Reload the page to show the updated Loan list
+                        location.reload();
+                    },
+                    error: function(error) {
+                        // Display an error notification
+                        alert('Error adding loan: ' + error.responseJSON.error);
+                    }
+                });
+            })
+            .catch(function(error) {
+                console.error('Error fetching book details: ', error);
+            });
     });
 });

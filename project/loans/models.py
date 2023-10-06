@@ -1,5 +1,5 @@
+# models.py
 from project import db, app
-
 
 class Loan(db.Model):
     __tablename__ = 'Loans'
@@ -18,6 +18,7 @@ class Loan(db.Model):
 
     def __repr__(self):
         return f"Customer: {self.customer_name}, Book: {self.book_name}, Loan Date: {self.loan_date}, Return Date: {self.return_date}"
+
 
 
 
