@@ -1,7 +1,6 @@
 from flask import render_template, Blueprint, request, redirect, url_for, jsonify
 from project import db
 from project.customers.models import Customer
-from project.customers.forms import CreateCustomer
 
 customers = Blueprint('customers', __name__, template_folder='templates', url_prefix='/customers')
 
@@ -21,7 +20,7 @@ def list_customers_json():
     return jsonify(customers=customer_list)
 
 # Route to create a new customer
-@customers.route('/create', methods=['POST','GET'])
+@customers.route('/create', methods=['POST', 'GET'])
 def create_customer():
     data = request.form
 
@@ -44,21 +43,28 @@ def create_customer():
 # Route to update an existing customer
 @customers.route('/<int:customer_id>/edit', methods=['POST'])
 def edit_customer(customer_id):
+    # Get the customer with the given ID
     customer = Customer.query.get(customer_id)
+
+    # Check if the customer exists
     if not customer:
         return jsonify({'error': 'Customer not found'}), 404
 
-    data = request.form
-    customer.name = data['name']
-    customer.city = data['city']
-    customer.age = data['age']
-
     try:
-        # Update the customer in the database
+        # Get data from the request
+        data = request.form
+
+        # Update customer details
+        customer.name = data['name']
+        customer.city = data['city']
+        customer.age = data['age']
+
+        # Commit the changes to the database
         db.session.commit()
+
         return redirect(url_for('customers.list_customers'))
     except Exception as e:
-        # Handle any exceptions, such as database errors
+        # Handle any exceptions
         db.session.rollback()
         return jsonify({'error': f'Error updating customer: {str(e)}'}), 500
 

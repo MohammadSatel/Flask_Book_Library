@@ -7,17 +7,17 @@ function searchCustomers() {
     tr = table.getElementsByTagName("tr");
     for (i = 1; i < tr.length; i++) {
         td = tr[i].getElementsByTagName("td");
-        let rowDisplay = false;  // Flag to determine if this row should be displayed
+        let rowDisplay = false;
         for (j = 0; j < td.length; j++) {
             if (td[j]) {
                 txtValue = td[j].textContent || td[j].innerText;
                 if (txtValue.toLowerCase().indexOf(filter) > -1) {
-                    rowDisplay = true;  // Display the row if any cell matches the search
+                    rowDisplay = true;
                     break;
                 }
             }
         }
-        tr[i].style.display = rowDisplay ? "" : "none";  // Show or hide the row
+        tr[i].style.display = rowDisplay ? "" : "none";
     }
 }
 
@@ -62,3 +62,93 @@ $(document).ready(function() {
         });
     });
 });
+
+// EDIT CUSTOMER
+function editCustomer(customerId) {
+    console.log('Edit button clicked for customer ID:', customerId);
+
+    // Fetch the existing customer data for the given customerId via an AJAX request
+    $.ajax({
+        url: `/customers/${customerId}/edit-data`,
+        method: 'GET',
+        success: function(response) {
+            console.log('Success:', response);
+
+            if (response.success) {
+                const customerData = response.customer;
+
+                // Pre-fill the modal form fields with the existing customer data
+                $('#edit_name').val(customerData.name);
+                $('#edit_city').val(customerData.city);
+                $('#edit_age').val(customerData.age);
+
+                // Store the customerId in a data attribute of the save button
+                $('#saveEditCustomerButton').attr('data-customer-id', customerId);
+
+                // Show the modal for editing
+                $('#editCustomerModal').modal('show');
+            } else {
+                console.log('Error:', response.error);
+                alert('Error fetching customer data: ' + response.error);
+            }
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            console.log('Error:', errorThrown);
+            alert('Error fetching customer data: ' + errorThrown);
+        }
+    });
+}
+
+// Event listener for the edit form submission
+$(document).ready(function() {
+    $('#saveEditCustomerButton').click(function(event) {
+        const customerId = $(this).attr('data-customer-id');
+
+        // Get form data
+        const name = $('#edit_name').val();
+        const city = $('#edit_city').val();
+        const age = $('#edit_age').val();
+
+        // Create a data object to send as JSON
+        const data = {
+            'name': name,
+            'city': city,
+            'age': age
+        };
+
+        // Send an AJAX request to update the customer data
+        $.ajax({
+            url: `/customers/${customerId}/edit`,
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(response) {
+                console.log('Success:', response);
+                alert('Customer updated successfully!');
+                $('#editCustomerModal').modal('hide');
+                location.reload();
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                console.log('Error:', errorThrown);
+                alert('Error updating customer: ' + errorThrown);
+            }
+        });
+    });
+});
+
+// DELETE CUSTOMER
+function deleteCustomer(customerId) {
+    $.ajax({
+        url: `/customers/${customerId}/delete`,
+        method: 'POST',
+        success: function(response) {
+            console.log('Success:', response);
+            alert('Customer deleted successfully!');
+            location.reload();
+        },
+        error: function(error) {
+            console.log('Error:', error);
+            alert('Error deleting customer: ' + error.responseJSON.error);
+        }
+    });
+}
