@@ -55,6 +55,7 @@ function fetchBookDetails(bookName) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Call functions to populate dropdowns
     populateBookDropdown();
     populateCustomerDropdown();
 

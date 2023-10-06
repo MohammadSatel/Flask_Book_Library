@@ -2,8 +2,8 @@ from flask import render_template, Blueprint, request, redirect, url_for, jsonif
 from project import db
 from project.loans.models import Loan
 from project.loans.forms import CreateLoan
-from project.books.models import Book  # Import the Book model
-from project.customers.models import Customer  # Import the Customer model
+from project.books.models import Book
+from project.customers.models import Customer
 
 # Create a Blueprint for loans
 loans = Blueprint('loans', __name__, template_folder='templates', url_prefix='/loans')
@@ -21,6 +21,21 @@ def list_loans_json():
     loan_list = [{'customer_name': loan.customer_name, 'book_name': loan.book_name, 'loan_date': loan.loan_date, 'return_date': loan.return_date} for loan in loans]
     return jsonify(loans=loan_list)
 
+# Route to get customer data in JSON format
+@loans.route('/customers/json', methods=['GET'])
+def list_customers_json():
+    customers = Customer.query.all()
+    customer_list = [{'name': customer.name} for customer in customers]
+    return jsonify(customers=customer_list)
+
+# Route to get book data in JSON format
+@loans.route('/books/json', methods=['GET'])
+def list_books_json():
+    books = Book.query.all()
+    book_list = [{'name': book.name} for book in books]
+    return jsonify(books=book_list)
+
+# Route to create a new loan
 @loans.route('/create', methods=['POST'])
 def create_loan():
     form = CreateLoan(request.form)
@@ -63,8 +78,6 @@ def create_loan():
         print('Invalid form data:', error_message)  # Log the error message
         return jsonify({'error': error_message}), 400
 
-
-
 # Route to end a loan
 @loans.route('/end/<int:loan_id>', methods=['POST'])
 def end_loan(loan_id):
@@ -95,6 +108,9 @@ def end_loan(loan_id):
         return redirect(url_for('loans.list_loans'))
     except Exception as e:
         db.session.rollback()
+        error_message = f'Error ending loan: {str(e)}'
+        print('Error ending loan:', error_message)  # Log the error message
+        return jsonify({'error': error_message}), 500
 
 # Route to edit a loan
 @loans.route('/<int:loan_id>/edit', methods=['POST'])
@@ -116,9 +132,13 @@ def edit_loan(loan_id):
             return redirect(url_for('loans.list_loans'))
         except Exception as e:
             db.session.rollback()
-            return jsonify({'error': f'Error updating loan: {str(e)}'}), 500
+            error_message = f'Error updating loan: {str(e)}'
+            print('Error updating loan:', error_message)  # Log the error message
+            return jsonify({'error': error_message}), 500
     else:
-        return jsonify({'error': 'Invalid form data'}), 400
+        error_message = 'Invalid form data'
+        print('Invalid form data:', error_message)  # Log the error message
+        return jsonify({'error': error_message}), 400
 
 # Route to delete a loan
 @loans.route('/<int:loan_id>/delete', methods=['POST'])
@@ -133,4 +153,6 @@ def delete_loan(loan_id):
         return redirect(url_for('loans.list_loans'))
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': f'Error deleting loan: {str(e)}'}), 500
+        error_message = f'Error deleting loan: {str(e)}'
+        print('Error deleting loan:', error_message)  # Log the error message
+        return jsonify({'error': error_message}), 500
