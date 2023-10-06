@@ -1,70 +1,89 @@
 // Function to populate book dropdown
 function populateBookDropdown() {
-    $.ajax({
-        url: '/books/json',
-        method: 'GET',
-        success: function(response) {
-            const books = response.books;
-            const bookDropdown = $('#book_name');
-            bookDropdown.empty();  // Clear previous options
+    axios.get('/books/json')
+        .then(function(response) {
+            const books = response.data.books;
+            const bookDropdown = document.getElementById('book_name');
+            bookDropdown.innerHTML = '';
+
             books.forEach(function(book) {
-                bookDropdown.append($('<option>').val(book.name).text(book.name));
+                const option = document.createElement('option');
+                option.value = book.name;
+                option.textContent = book.name;
+                bookDropdown.appendChild(option);
             });
-        },
-        error: function(error) {
-            console.error('Error fetching book names: ', error);
-        }
-    });
+        })
+        .catch(function(error) {
+            console.error('Error fetching book names:', error);
+        });
 }
 
 // Function to populate customer dropdown
 function populateCustomerDropdown() {
-    $.ajax({
-        url: '/customers/json',
-        method: 'GET',
-        success: function(response) {
-            const customers = response.customers;  // Assuming your response has a 'customers' property
-            const customerDropdown = $('#customer_name');
-            customerDropdown.empty();  // Clear previous options
+    axios.get('/customers/json')
+        .then(function(response) {
+            const customers = response.data.customers;
+            const customerDropdown = document.getElementById('customer_name');
+            customerDropdown.innerHTML = '';
+
             if (customers && customers.length > 0) {
                 customers.forEach(function(customer) {
-                    customerDropdown.append($('<option>').val(customer.name).text(customer.name));
+                    const option = document.createElement('option');
+                    option.value = customer.name;
+                    option.textContent = customer.name;
+                    customerDropdown.appendChild(option);
                 });
             } else {
                 console.error('No customers found.');
             }
-        },
-        error: function(error) {
-            console.error('Error fetching customer names: ', error);
-        }
-    });
+        })
+        .catch(function(error) {
+            console.error('Error fetching customer names:', error);
+        });
 }
 
 // Function to fetch book details based on the selected book name
 function fetchBookDetails(bookName) {
-    return $.ajax({
-        url: `/books/details/${bookName}`,
-        method: 'GET',
-    });
+    return axios.get(`/books/details/${bookName}`)
+        .then(function(response) {
+            return response.data;
+        })
+        .catch(function(error) {
+            console.error('Error fetching book details:', error);
+            throw new Error('Error fetching book details');
+        });
 }
 
-$(document).ready(function() {
-    populateBookDropdown();  // Populate book dropdown
-    populateCustomerDropdown();  // Populate customer dropdown
+document.addEventListener('DOMContentLoaded', function() {
+    populateBookDropdown();
+    populateCustomerDropdown();
 
-    $('#addLoanForm').submit(function(event) {
-        event.preventDefault();  // Prevent the default form submission
+    const loanDateInput = document.getElementById('loan_date');
+    const returnDateInput = document.getElementById('return_date');
 
-        // Get the loan and return dates and format them
-        const loanDate = new Date($('#loan_date').val());
+    loanDateInput.addEventListener('focus', function() {
+        loanDateInput.type = 'date';
+        loanDateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
+    });
+
+    returnDateInput.addEventListener('focus', function() {
+        returnDateInput.type = 'date';
+        returnDateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
+    });
+
+    const addLoanForm = document.getElementById('addLoanForm');
+    addLoanForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const loanDate = new Date(document.getElementById('loan_date').value);
         const formattedLoanDate = loanDate.toISOString().split('T')[0];
 
-        const returnDate = new Date($('#return_date').val());
+        const returnDate = new Date(document.getElementById('return_date').value);
         const formattedReturnDate = returnDate.toISOString().split('T')[0];
 
         const formData = {
-            customer_name: $('#customer_name').val(),
-            book_name: $('#book_name').val(),
+            customer_name: document.getElementById('customer_name').value,
+            book_name: document.getElementById('book_name').value,
             loan_date: formattedLoanDate,
             return_date: formattedReturnDate
         };
@@ -75,23 +94,17 @@ $(document).ready(function() {
             .then(function(bookDetails) {
                 formData.book_details = bookDetails;
 
-                $.ajax({
-                    url: '/loans/create',
-                    method: 'POST',
-                    data: JSON.stringify(formData),  // Stringify the data
-                    contentType: 'application/json',  // Set content type
-                    success: function(response) {
-                        alert('Loan added successfully!');
-                        $('#addLoanModal').modal('hide');
-                        location.reload();
-                    },
-                    error: function(error) {
-                        alert('Error adding loan: ' + error.responseJSON.error);
-                    }
-                });
+                return axios.post('/loans/create', formData);
+            })
+            .then(function(response) {
+                alert('Loan added successfully!');
+                document.getElementById('addLoanModal').classList.remove('show');
+                document.body.classList.remove('modal-open');
+                location.reload();
             })
             .catch(function(error) {
-                console.error('Error fetching book details: ', error);
+                console.error('Error adding loan:', error.response ? error.response.data : error.message);
+                alert('Error adding loan: ' + (error.response ? error.response.data.error : error.message));
             });
     });
 });

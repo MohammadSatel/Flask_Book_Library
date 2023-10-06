@@ -47,17 +47,6 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
-    <!-- Include jQuery and Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
-    <!-- Include jQuery UI -->
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-    <!-- Link to external JavaScript file -->
-    <script src="{{ url_for('static', filename='js/loans.js') }}"></script>
-
     <!-- Add loan Modal -->
     <div class="modal fade" id="addLoanModal" tabindex="-1" role="dialog" aria-labelledby="addLoanModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -85,11 +74,13 @@
                         </div>
                         <div class="form-group">
                             <label for="loan_date">Loan Date</label>
-                            <input type="text" class="form-control" id="loan_date" placeholder="Select loan date" required>
+                            <!-- Use type="date" for a date picker -->
+                            <input type="date" class="form-control" id="loan_date" required>
                         </div>
                         <div class="form-group">
                             <label for="return_date">Return Date</label>
-                            <input type="text" class="form-control" id="return_date" placeholder="Select return date" required>
+                            <!-- Use type="date" for a date picker -->
+                            <input type="date" class="form-control" id="return_date" required>
                         </div>
                         <button type="submit" class="btn btn-primary">Add Loan</button>
                     </form>
@@ -97,12 +88,10 @@
             </div>
         </div>
     </div>
-
-    <!-- Initialize Datepicker -->
-    <script>
-        $(document).ready(function() {
-            $('#loan_date').datepicker();
-            $('#return_date').datepicker();
-        });
-    </script>
 {% endblock %}
+
+<!-- Include loans.js -->
+<script src="{{ url_for('static', filename='js/loans.js') }}"></script>
+
+</body>
+</html>

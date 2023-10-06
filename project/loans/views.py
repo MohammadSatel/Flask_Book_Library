@@ -21,7 +21,6 @@ def list_loans_json():
     loan_list = [{'customer_name': loan.customer_name, 'book_name': loan.book_name, 'loan_date': loan.loan_date, 'return_date': loan.return_date} for loan in loans]
     return jsonify(loans=loan_list)
 
-# Route to create a new loan
 @loans.route('/create', methods=['POST'])
 def create_loan():
     form = CreateLoan(request.form)
@@ -63,6 +62,7 @@ def create_loan():
         error_message = 'Invalid form data'
         print('Invalid form data:', error_message)  # Log the error message
         return jsonify({'error': error_message}), 400
+
 
 
 # Route to end a loan
