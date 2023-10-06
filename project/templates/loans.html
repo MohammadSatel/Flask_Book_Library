@@ -44,9 +44,16 @@
         </table>
     </div>
 
-    <!-- Bootstrap JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <!-- Include jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <!-- Include jQuery UI -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <!-- Link to external JavaScript file -->
     <script src="{{ url_for('static', filename='js/loans.js') }}"></script>
@@ -66,7 +73,9 @@
                     <form id="addLoanForm">
                         <div class="form-group">
                             <label for="customer_name">Customer Name</label>
-                            <input type="text" class="form-control" id="customer_name" placeholder="Enter customer name" required>
+                            <select class="form-control" id="customer_name" required>
+                                <!-- Options will be populated dynamically by JavaScript -->
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="book_name">Book Name</label>
@@ -76,11 +85,11 @@
                         </div>
                         <div class="form-group">
                             <label for="loan_date">Loan Date</label>
-                            <input type="text" class="form-control" id="loan_date" placeholder="Enter loan date" required>
+                            <input type="text" class="form-control" id="loan_date" placeholder="Select loan date" required>
                         </div>
                         <div class="form-group">
                             <label for="return_date">Return Date</label>
-                            <input type="text" class="form-control" id="return_date" placeholder="Enter return date" required>
+                            <input type="text" class="form-control" id="return_date" placeholder="Select return date" required>
                         </div>
                         <button type="submit" class="btn btn-primary">Add Loan</button>
                     </form>
@@ -88,4 +97,12 @@
             </div>
         </div>
     </div>
+
+    <!-- Initialize Datepicker -->
+    <script>
+        $(document).ready(function() {
+            $('#loan_date').datepicker();
+            $('#return_date').datepicker();
+        });
+    </script>
 {% endblock %}

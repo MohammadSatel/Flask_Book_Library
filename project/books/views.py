@@ -106,6 +106,20 @@ def delete_book(book_id):
         # Handle any exceptions, such as database errors
         db.session.rollback()
         return jsonify({'error': f'Error deleting book: {str(e)}'}), 500
-    
-    
-    
+
+@books.route('/details/<string:book_name>', methods=['GET'])
+def get_book_details(book_name):
+        # Find the book by its name
+        book = Book.query.filter_by(name=book_name).first()
+
+        if book:
+            book_data = {
+                'name': book.name,
+                'author': book.author,
+                'year_published': book.year_published,
+                'book_type': book.book_type
+            }
+            return jsonify(book=book_data)
+        else:
+            return jsonify({'error': 'Book not found'}), 404
+        

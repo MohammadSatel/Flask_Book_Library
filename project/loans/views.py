@@ -3,8 +3,7 @@ from project import db
 from project.loans.models import Loan
 from project.loans.forms import CreateLoan
 from project.books.models import Book  # Import the Book model
-from project.customers.models import Customer
-
+from project.customers.models import Customer  # Import the Customer model
 
 # Create a Blueprint for loans
 loans = Blueprint('loans', __name__, template_folder='templates', url_prefix='/loans')
@@ -39,6 +38,11 @@ def create_loan():
         if not book:
             return jsonify({'error': 'Book not available for loan.'}), 400
 
+        # Check if the customer exists
+        customer = Customer.query.filter_by(name=customer_name).first()
+        if not customer:
+            return jsonify({'error': 'Customer not found.'}), 400
+
         new_loan = Loan(customer_name=customer_name, book_name=book_name, loan_date=loan_date, return_date=return_date)
 
         try:
@@ -52,9 +56,14 @@ def create_loan():
             return redirect(url_for('loans.list_loans'))
         except Exception as e:
             db.session.rollback()
-            return jsonify({'error': f'Error creating loan: {str(e)}'}), 500
+            error_message = f'Error creating loan: {str(e)}'
+            print('Error creating loan:', error_message)  # Log the error message
+            return jsonify({'error': error_message}), 500
     else:
-        return jsonify({'error': 'Invalid form data'}), 400
+        error_message = 'Invalid form data'
+        print('Invalid form data:', error_message)  # Log the error message
+        return jsonify({'error': error_message}), 400
+
 
 # Route to end a loan
 @loans.route('/end/<int:loan_id>', methods=['POST'])
