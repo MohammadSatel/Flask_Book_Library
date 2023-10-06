@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
     
 {% block content %}
@@ -12,6 +11,16 @@
 
         <!-- Search box -->
         <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search for loans..">
+
+        <!-- Book dropdown -->
+        <select id="book_name" class="form-control">
+            <!-- Options will be populated dynamically using JavaScript -->
+        </select>
+
+        <!-- Customer dropdown -->
+        <select id="customer_name" class="form-control">
+            <!-- Options will be populated dynamically using JavaScript -->
+        </select>
 
         <!-- Table to list loans -->
         <table class="table table-bordered">
@@ -80,5 +89,4 @@
             </div>
         </div>
     </div>
-    {% endblock %}
-
+{% endblock %}

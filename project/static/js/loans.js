@@ -1,5 +1,5 @@
 // Function to handle search
-function searchloans() {
+function searchLoans() {
     let input, filter, table, tr, td, i, j, txtValue;
     input = document.getElementById("searchInput");
     filter = input.value.toLowerCase();
@@ -22,7 +22,7 @@ function searchloans() {
 }
 
 // Event listener for search input
-document.getElementById("searchInput").addEventListener("input", searchloans);
+document.getElementById("searchInput").addEventListener("input", searchLoans);
 
 // Handle form submission for adding a new Loan
 $(document).ready(function() {
@@ -30,18 +30,20 @@ $(document).ready(function() {
         event.preventDefault();  // Prevent the default form submission
 
         // Get form data
-        const name = $('#name').val();
-        const author = $('#author').val();
-        const time = $('#time').val();
+        const customer_name = $('#customer_name').val();
+        const book_name = $('#book_name').val();
+        const loan_date = $('#loan_date').val();
+        const return_date = $('#return_date').val();
 
         // Send an AJAX request to create a new Loan
         $.ajax({
             url: '/loans/create',
             method: 'POST',
             data: {
-                name: name,
-                author: author,
-                time: time
+                customer_name: customer_name,
+                book_name: book_name,
+                loan_date: loan_date,
+                return_date: return_date
             },
             success: function(response) {
                 // Display a success notification
