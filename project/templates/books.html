@@ -2,6 +2,11 @@
 
 {% block content %}
 
+<!-- Link to external JavaScript file -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script src="{{ url_for('static', filename='js/books.js') }}"></script>
+
 <div class="container">
     <h1 class="my-4">Books</h1>
 
@@ -36,16 +41,13 @@
                 <td>{{ book.book_type }}</td> <!-- Display Book Type -->
                 <td>
                     <button class="btn btn-warning btn-sm" onclick="editBook({{ book.id }})">Edit</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteBook({{ book.id }})">Delete</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteButtonClick({{ book.id }})">Delete</button>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
-
-<!-- Link to external JavaScript file -->
-<script src="{{ url_for('static', filename='js/books.js') }}"></script>
 
 <!-- Add Book Modal -->
 <div class="modal fade" id="addBookModal" tabindex="-1" role="dialog" aria-labelledby="addBookModalLabel"
