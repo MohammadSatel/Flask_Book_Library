@@ -1,3 +1,4 @@
+# Import necessary modules
 from flask import render_template, Blueprint, request, redirect, url_for, jsonify
 from project import db
 from project.customers.models import Customer
@@ -39,6 +40,23 @@ def create_customer():
         # Handle any exceptions, such as database errors
         db.session.rollback()
         return jsonify({'error': f'Error creating customer: {str(e)}'}), 500
+
+# Route to fetch customer data for editing
+@customers.route('/<int:customer_id>/edit-data', methods=['GET'])
+def edit_customer_data(customer_id):
+    # Get the customer with the given ID
+    customer = Customer.query.get(customer_id)
+
+    if customer:
+        # Convert customer data to a dictionary
+        customer_data = {
+            'name': customer.name,
+            'city': customer.city,
+            'age': customer.age
+        }
+        return jsonify({'success': True, 'customer': customer_data}), 200
+    else:
+        return jsonify({'error': 'Customer not found'}), 404
 
 # Route to update an existing customer
 @customers.route('/<int:customer_id>/edit', methods=['POST'])

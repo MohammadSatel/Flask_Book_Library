@@ -63,7 +63,7 @@ $(document).ready(function() {
     });
 });
 
-// EDIT CUSTOMER
+// Function to handle edit customer
 function editCustomer(customerId) {
     console.log('Edit button clicked for customer ID:', customerId);
 
@@ -109,19 +109,15 @@ $(document).ready(function() {
         const city = $('#edit_city').val();
         const age = $('#edit_age').val();
 
-        // Create a data object to send as JSON
-        const data = {
-            'name': name,
-            'city': city,
-            'age': age
-        };
-
         // Send an AJAX request to update the customer data
         $.ajax({
             url: `/customers/${customerId}/edit`,
             method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(data),
+            data: {
+                name: name,
+                city: city,
+                age: age
+            },
             success: function(response) {
                 console.log('Success:', response);
                 alert('Customer updated successfully!');

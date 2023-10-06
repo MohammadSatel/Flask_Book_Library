@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <div class="container">
     <h1 class="my-4">Customers</h1>
 
@@ -32,21 +33,14 @@
                 <td>{{ customer.city }}</td>  <!-- Display 'city' instead of 'author' -->
                 <td>{{ customer.age }}</td>  <!-- Display 'age' -->
                 <td>
-                    <a href="#" class="btn btn-warning btn-sm">Edit</a>
-                    <button class="btn btn-danger btn-sm">Delete</button>
+                    <a href="#" class="btn btn-warning btn-sm" onclick="editCustomer({{ customer.id }})">Edit</a>
+                    <button class="btn btn-danger btn-sm" onclick="deleteCustomer({{ customer.id }})">Delete</button>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
-
-<!-- Bootstrap JavaScript -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
-<!-- Add this before including your customers.js -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!-- Link to external JavaScript file -->
 <script src="{{ url_for('static', filename='js/customers.js') }}"></script>
@@ -78,6 +72,39 @@
                         <input type="number" class="form-control" id="age" placeholder="Enter age" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Add Customer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Customer Modal -->
+<div class="modal fade" id="editCustomerModal" tabindex="-1" role="dialog" aria-labelledby="editCustomerModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCustomerModalLabel">Edit Customer</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Edit Customer Form -->
+                <form id="editCustomerForm">
+                    <div class="form-group">
+                        <label for="edit_name">Name</label>
+                        <input type="text" class="form-control" id="edit_name" placeholder="Enter customer name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_city">City</label>
+                        <input type="text" class="form-control" id="edit_city" placeholder="Enter city" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_age">Age</label>
+                        <input type="number" class="form-control" id="edit_age" placeholder="Enter age" required>
+                    </div>
+                    <button type="button" class="btn btn-primary" id="saveEditCustomerButton">Save Changes</button>
                 </form>
             </div>
         </div>
