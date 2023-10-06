@@ -67,6 +67,7 @@ $(document).ready(function() {
 });
 
 // EDIT BOOK
+// EDIT BOOK
 function editBook(bookId) {
     console.log('Edit button clicked for book ID:', bookId);
 
@@ -104,39 +105,41 @@ function editBook(bookId) {
 }
 
 // Event listener for the edit form submission
-$('#saveEditBookButton').click(function(event) {
-    const bookId = $(this).attr('data-book-id');
+$(document).ready(function() {
+    $('#saveEditBookButton').click(function(event) {
+        const bookId = $(this).attr('data-book-id');
 
-    // Get form data
-    const name = $('#edit_name').val();
-    const author = $('#edit_author').val();
-    const yearPublished = $('#edit_year_published').val();
-    const bookType = $('#edit_book_type').val();
+        // Get form data
+        const name = $('#edit_name').val();
+        const author = $('#edit_author').val();
+        const yearPublished = $('#edit_year_published').val();
+        const bookType = $('#edit_book_type').val();
 
-    // Create a data object to send as JSON
-    const data = {
-        'name': name,
-        'author': author,
-        'year_published': yearPublished,
-        'book_type': bookType
-    };
+        // Create a data object to send as JSON
+        const data = {
+            'name': name,
+            'author': author,
+            'year_published': yearPublished,
+            'book_type': bookType
+        };
 
-    // Send an AJAX request to update the book data
-    $.ajax({
-        url: `/books/${bookId}/edit`,
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-        success: function(response) {
-            console.log('Success:', response);
-            alert('Book updated successfully!');
-            $('#editBookModal').modal('hide');
-            location.reload();
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            console.log('Error:', errorThrown);
-            alert('Error updating book: ' + errorThrown);
-        }
+        // Send an AJAX request to update the book data
+        $.ajax({
+            url: `/books/${bookId}/edit`,
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(response) {
+                console.log('Success:', response);
+                alert('Book updated successfully!');
+                $('#editBookModal').modal('hide');
+                location.reload();
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                console.log('Error:', errorThrown);
+                alert('Error updating book: ' + errorThrown);
+            }
+        });
     });
 });
 
