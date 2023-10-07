@@ -13,6 +13,8 @@ def list_books():
     books = Book.query.all()
     return render_template('books.html', books=books)
 
+
+
 # Route to fetch books in JSON format
 @books.route('/json', methods=['GET'])
 def list_books_json():
@@ -21,6 +23,7 @@ def list_books_json():
     # Create a list of dictionaries representing each book with the required fields
     book_list = [{'name': book.name, 'author': book.author, 'year_published': book.year_published, 'book_type': book.book_type} for book in books]
     return jsonify(books=book_list)
+
 
 @books.route('/create', methods=['POST', 'GET'])
 def create_book():
