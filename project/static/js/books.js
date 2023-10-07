@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     }
 
-    // Attach editBook and deleteBook to the global window object
+    // Attach editBook and deleteBook to the global window objectd
     window.editBook = editBook;
     window.deleteBook = deleteBook;
 });
