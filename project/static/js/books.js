@@ -51,21 +51,21 @@ document.addEventListener("DOMContentLoaded", () => {
             year_published: year_published,
             book_type: book_type
         })
-        .then(response => {
-            console.log('Success:', response.data);
-            alert('Book added successfully!');
-            hideAddBookModal();
-            window.location.reload();  // Reload the page to show the updated book list
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error adding book: ' + JSON.stringify(error.response));  // Log the complete error response
-        });
+            .then(response => {
+                console.log('Success:', response.data);
+                alert('Book added successfully!');
+                hideAddBookModal();
+                window.location.reload();  // Reload the page to show the updated book list
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error adding book: ' + JSON.stringify(error.response));  // Log the complete error response
+            });
     }
 
     const addBookForm = document.getElementById("addBookForm");
     if (addBookForm) {
-        addBookForm.addEventListener("submit", function(event) {
+        addBookForm.addEventListener("submit", function (event) {
             event.preventDefault();  // Prevent the default form submission
             addBook();  // Call the addBook function to handle adding a new book
         });
@@ -88,7 +88,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     document.getElementById('edit_year_published').value = bookData.year_published;
                     document.getElementById('edit_book_type').value = bookData.book_type;
 
-                    document.getElementById('saveEditBookButton').setAttribute('data-book-id', bookId);
+                    // Assign the bookId to the button's dataset
+                    document.getElementById('saveEditBookButton').dataset.bookId = bookId;
 
                     document.getElementById('editBookModal').style.display = 'block';
                 } else {
@@ -102,19 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     }
 
-    const editButtons = document.querySelectorAll('.btn-warning');
-    if (editButtons) {
-        editButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const bookId = this.getAttribute('data-book-id');
-                editBook(bookId);
-            });
-        });
-    } else {
-        console.error("Edit buttons not found.");
-    }
-    
-
+    // Function to handle deleting a book
     function deleteBook(bookId) {
         axios.post(`/books/${bookId}/delete`)
             .then(response => {
@@ -127,18 +116,5 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert('Error deleting book: ' + error.response.data.error);
             });
     }
-
-    const deleteButtons = document.querySelectorAll('.btn-danger');
-    if (deleteButtons) {
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const bookId = this.getAttribute('data-book-id');
-            deleteBook(bookId);
-        });
-    });
-} else {
-    console.error("Delete buttons not found.");
-}
-
 
 });

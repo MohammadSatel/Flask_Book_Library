@@ -2,10 +2,6 @@
 
 {% block content %}
 
-<!-- Link to external JavaScript file -->
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-<script src="{{ url_for('static', filename='js/books.js') }}"></script>
 
 <div class="container">
     <h1 class="my-4">Books</h1>
@@ -40,8 +36,13 @@
                 <td>{{ book.year_published }}</td> <!-- Display Year Published -->
                 <td>{{ book.book_type }}</td> <!-- Display Book Type -->
                 <td>
-                    <button class="btn btn-warning btn-sm" onclick="editBookButtonClick({{ book.id }})">Edit</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteBookButtonClick({{ book.id }})">Delete</button>
+                    <!-- Inside the <td> for "Edit" button -->
+                    <button class="btn btn-warning btn-sm" onclick="editBook({{ book.id }})">Edit</button>
+
+                    <!-- Inside the <td> for "Delete" button -->
+                    <button class="btn btn-danger btn-sm" onclick="deleteBook({{ book.id }})">Delete</button>
+
+
                 </td>
             </tr>
             {% endfor %}
@@ -73,7 +74,8 @@
                     </div>
                     <div class="form-group">
                         <label for="year_published">Year Published</label>
-                        <input type="number" class="form-control" id="year_published" placeholder="Enter year published" required>
+                        <input type="number" class="form-control" id="year_published" placeholder="Enter year published"
+                            required>
                     </div>
                     <div class="form-group">
                         <label for="book_type">Type</label>
@@ -112,22 +114,32 @@
                     </div>
                     <div class="form-group">
                         <label for="edit_author">Author</label>
-                        <input type="text" class="form-control" id="edit_author" placeholder="Enter author name" required>
+                        <input type="text" class="form-control" id="edit_author" placeholder="Enter author name"
+                            required>
                     </div>
                     <div class="form-group">
                         <label for="edit_year_published">Year Published</label>
-                        <input type="number" class="form-control" id="edit_year_published" placeholder="Enter year published" required>
+                        <input type="number" class="form-control" id="edit_year_published"
+                            placeholder="Enter year published" required>
                     </div>
                     <div class="form-group">
                         <label for="edit_book_type">Type</label>
-                        <input type="number" class="form-control" id="edit_book_type" placeholder="Enter book type" required>
+                        <input type="number" class="form-control" id="edit_book_type" placeholder="Enter book type"
+                            required>
                     </div>
-                    
+
                     <button type="button" class="btn btn-primary" id="saveEditBookButton">Save Changes</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Include Axios -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<!-- Include your custom JavaScript (books.js) -->
+<script src="{{ url_for('static', filename='js/books.js') }}"></script>
+
 
 {% endblock %}
