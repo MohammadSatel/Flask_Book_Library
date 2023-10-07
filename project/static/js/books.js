@@ -32,10 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Function to handle hiding the add book modal
     function hideAddBookModal() {
-        // You need to implement the hide functionality specific to your modal library
-        // For Bootstrap modal, you can use: $('#addBookModal').modal('hide');
-        // Example for Bootstrap modal:
-        // $('#addBookModal').modal('hide');
+        $('#addBookModal').modal('hide');
     }
 
     // Function to handle adding a new book
@@ -73,35 +70,32 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("Element with ID 'addBookForm' not found.");
     }
 
-    function editBook(bookId) {
-        console.log('Edit button clicked for book ID:', bookId);
+    //function to edit book
+ // Modify the editBook function to fetch the updated book list after editing
+ function editBook(bookId) {
+    const name = document.getElementById('edit_name').value;
+    const author = document.getElementById('edit_author').value;
+    const year_published = document.getElementById('edit_year_published').value;
+    const book_type = document.getElementById('edit_book_type').value;
 
-        axios.get(`/books/${bookId}/edit-data`)
-            .then(response => {
-                console.log('Success:', response.data);
+    axios.post(`/books/${bookId}/edit`, {
+        name: name,
+        author: author,
+        year_published: year_published,
+        book_type: book_type
+    })
+    .then(response => {
+        console.log('Success:', response.data);
+        alert('Book edited successfully!');
+        fetchBookList(); // Fetch and update the book list
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error editing book: ' + JSON.stringify(error.response));  // Log the complete error response
+    });
+}
 
-                if (response.data.success) {
-                    const bookData = response.data.book;
 
-                    document.getElementById('edit_name').value = bookData.name;
-                    document.getElementById('edit_author').value = bookData.author;
-                    document.getElementById('edit_year_published').value = bookData.year_published;
-                    document.getElementById('edit_book_type').value = bookData.book_type;
-
-                    // Assign the bookId to the button's dataset
-                    document.getElementById('saveEditBookButton').dataset.bookId = bookId;
-
-                    document.getElementById('editBookModal').style.display = 'block';
-                } else {
-                    console.log('Error:', response.data.error);
-                    alert('Error fetching book data: ' + response.data.error);
-                }
-            })
-            .catch(error => {
-                console.log('Error:', error);
-                alert('Error fetching book data: ' + error);
-            });
-    }
 
     // Function to handle deleting a book
     function deleteBook(bookId) {
@@ -117,4 +111,8 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     }
 
+    // Attach editBook and deleteBook to the global window object
+    window.editBook = editBook;
+    window.deleteBook = deleteBook;
 });
+
