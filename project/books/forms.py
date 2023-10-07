@@ -7,7 +7,7 @@ from wtforms.validators import DataRequired
 # variable_name = Field_type('Label that will show', validators=[V_func1(), V_func2(),...])
 class CreateBook(FlaskForm):
     name = StringField('Book Name', validators=[DataRequired()])
-    author = StringField('Author')  # Change to StringField for author
+    author = StringField('Author')
     year_published = IntegerField('Year Published', validators=[DataRequired()])
-    book_type = SelectField('Book Type', choices=[(1, 'Up to 10 days'), (2, 'Up to 5 days'), (3, 'Up to 2 days')], coerce=int, validators=[DataRequired()])
+    book_type = SelectField('Book Type', choices=[('2days', 'Up to 2 days'), ('5days', 'Up to 5 days'), ('10days', 'Up to 10 days')], validators=[DataRequired()])
     submit = SubmitField('Create Book')

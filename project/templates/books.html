@@ -40,8 +40,8 @@
                 <td>{{ book.year_published }}</td> <!-- Display Year Published -->
                 <td>{{ book.book_type }}</td> <!-- Display Book Type -->
                 <td>
-                    <button class="btn btn-warning btn-sm" onclick="editBook({{ book.id }})">Edit</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteButtonClick({{ book.id }})">Delete</button>
+                    <button class="btn btn-warning btn-sm" onclick="editBookButtonClick({{ book.id }})">Edit</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteBookButtonClick({{ book.id }})">Delete</button>
                 </td>
             </tr>
             {% endfor %}
@@ -77,15 +77,20 @@
                     </div>
                     <div class="form-group">
                         <label for="book_type">Type</label>
-                        <input type="number" class="form-control" id="book_type" placeholder="Enter book type" required>
+                        <select class="form-control" id="book_type" required>
+                            <option value="2days">2 Days</option>
+                            <option value="5days">5 Days</option>
+                            <option value="10days">10 Days</option>
+                        </select>
                     </div>
-                    
                     <button type="submit" class="btn btn-primary">Add Book</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+
 
 <!-- Edit Book Modal -->
 <div class="modal fade" id="editBookModal" tabindex="-1" role="dialog" aria-labelledby="editBookModalLabel"

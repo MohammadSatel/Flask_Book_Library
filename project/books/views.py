@@ -24,7 +24,7 @@ def list_books_json():
 
 @books.route('/create', methods=['POST', 'GET'])
 def create_book():
-    data = request.form
+    data = request.get_json()
 
     new_book = Book(name=data['name'], author=data['author'], year_published=data['year_published'], book_type=data['book_type'])
 
@@ -37,6 +37,7 @@ def create_book():
         # Handle any exceptions, such as database errors
         db.session.rollback()
         return jsonify({'error': f'Error creating book: {str(e)}'}), 500
+
 
 
 # Route to update an existing book
