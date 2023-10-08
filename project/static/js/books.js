@@ -82,57 +82,55 @@ document.addEventListener("DOMContentLoaded", () => {
         // For demonstration purposes, let's just log a message
         console.log('Book list updated.');
     }
-    
+
 
     // Function to handle editing a book
     function editBook(bookId) {
-        axios.get(`/books/${bookId}/edit-data`)
-            .then(response => {
-                if (response.data.success) {
-                    const book = response.data.book;
-                    document.getElementById('edit_name').value = book.name;
-                    document.getElementById('edit_author').value = book.author;
-                    document.getElementById('edit_year_published').value = book.year_published;
-                    document.getElementById('edit_book_type').value = book.book_type;
+    axios.get(`/books/${bookId}/edit-data`)
+        .then(response => {
+            if (response.data.success) {
+                const book = response.data.book;
+                document.getElementById('edit_name').value = book.name;
+                document.getElementById('edit_author').value = book.author;
+                document.getElementById('edit_year_published').value = book.year_published;
+                document.getElementById('edit_book_type').value = book.book_type;
 
-                    $('#editBookModal').modal('show');
-                } else {
-                    alert('Error fetching book information: ' + response.data.error);
-                }
+                $('#editBookModal').modal('show');
+            } else {
+                alert('Error fetching book information: ' + response.data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error fetching book information: ' + JSON.stringify(error.response));
+        });
+
+    const saveChangesButton = document.getElementById('saveEditBookButton');
+    saveChangesButton.addEventListener('click', () => {
+        const name = document.getElementById('edit_name').value;
+        const author = document.getElementById('edit_author').value;
+        const year_published = document.getElementById('edit_year_published').value;
+        const book_type = document.getElementById('edit_book_type').value;
+
+        axios.post(`/books/${bookId}/edit`, {
+            name: name,
+            author: author,
+            year_published: year_published,
+            book_type: book_type
+        })
+            .then(response => {
+                console.log('Success:', response.data);
+                alert('Book edited successfully!');
+                $('#editBookModal').modal('hide');
+                window.location.reload(); // Reload the page after successful edit
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Error fetching book information: ' + JSON.stringify(error.response));
+                alert('Error editing book: ' + JSON.stringify(error.response));
             });
+    });
+}
 
-        const saveChangesButton = document.getElementById('saveEditBookButton');
-        saveChangesButton.addEventListener('click', () => {
-            const name = document.getElementById('edit_name').value;
-            const author = document.getElementById('edit_author').value;
-            const year_published = document.getElementById('edit_year_published').value;
-            const book_type = document.getElementById('edit_book_type').value;
-
-            // Retrieve the book type from the dropdown, ensuring it remains the same as adding a book
-            const selectedBookType = document.getElementById('book_type').value;
-
-            axios.post(`/books/${bookId}/edit`, {
-                name: name,
-                author: author,
-                year_published: year_published,
-                book_type: selectedBookType  // Use the selectedBookType here
-            })
-                .then(response => {
-                    console.log('Success:', response.data);
-                    alert('Book edited successfully!');
-                    $('#editBookModal').modal('hide');
-                    fetchBookList(); // Fetch and update the book list
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error editing book: ' + JSON.stringify(error.response));
-                });
-        });
-    }
 
     // Function to handle deleting a book
     function deleteBook(bookId) {
