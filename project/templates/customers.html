@@ -42,8 +42,6 @@
     </table>
 </div>
 
-<!-- Link to external JavaScript file -->
-<script src="{{ url_for('static', filename='js/customers.js') }}"></script>
 
 <!-- Add Customer Modal -->
 <div class="modal fade" id="addCustomerModal" tabindex="-1" role="dialog" aria-labelledby="addCustomerModalLabel"
@@ -110,5 +108,14 @@
         </div>
     </div>
 </div>
+
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Include Axios -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<!-- Include your custom JavaScript (customers.js) -->
+<script src="{{ url_for('static', filename='js/customers.js') }}"></script>
 
 {% endblock %}
