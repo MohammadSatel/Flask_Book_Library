@@ -1,5 +1,5 @@
 from flask import render_template, Blueprint, request, redirect, url_for, jsonify
-from project import customers, db  # Make sure to import customers and db
+from project import db 
 from project.loans.models import Loan
 from project.loans.forms import CreateLoan
 from project.books.models import Book
@@ -68,30 +68,32 @@ def get_customer_details(customer_name):
 # Route to create a new loan
 @loans.route('/create', methods=['POST'])
 def create_loan():
-    # Get form data
-    form = CreateLoan(request.form)
+    try:
+        # Get form data
+        form = CreateLoan(request.form)
+        form.csrf_token.data = request.cookies.get('csrf_token')  # Set CSRF token from the request
 
-    if form.validate():
-        customer_name = form.customer_name.data
-        book_name = form.book_name.data
-        loan_date = form.loan_date.data
-        return_date = form.return_date.data
 
-        # Check if the book is available
-        book = Book.query.filter_by(name=book_name, status='available').first()
+        if form.validate():
+            customer_name = form.customer_name.data
+            book_name = form.book_name.data
+            loan_date = form.loan_date.data
+            return_date = form.return_date.data
 
-        if not book:
-            return jsonify({'error': 'Book not available for loan.'}), 400
+            # Check if the book is available
+            book = Book.query.filter_by(name=book_name, status='available').first()
 
-        # Check if the customer exists
-        customer = Customer.query.filter_by(name=customer_name).first()
-        if not customer:
-            return jsonify({'error': 'Customer not found.'}), 400
+            if not book:
+                return jsonify({'error': 'Book not available for loan.'}), 400
 
-        # Create a new loan
-        new_loan = Loan(customer_name=customer_name, book_name=book_name, loan_date=loan_date, return_date=return_date)
+            # Check if the customer exists
+            customer = Customer.query.filter_by(name=customer_name).first()
+            if not customer:
+                return jsonify({'error': 'Customer not found.'}), 400
 
-        try:
+            # Create a new loan
+            new_loan = Loan(customer_name=customer_name, book_name=book_name, loan_date=loan_date, return_date=return_date)
+
             # Add the new loan to the database
             db.session.add(new_loan)
             db.session.commit()
@@ -102,15 +104,15 @@ def create_loan():
 
             # Redirect to the list of loans
             return redirect(url_for('loans.list_loans'))
-        except Exception as e:
-            db.session.rollback()
-            error_message = f'Error creating loan: {str(e)}'
-            print('Error creating loan:', error_message)  # Log the error message
-            return jsonify({'error': error_message}), 500
-    else:
-        error_message = 'Invalid form data'
-        print('Invalid form data:', error_message)  # Log the error message
-        return jsonify({'error': error_message}), 400
+        else:
+            error_message = 'Invalid form data'
+            print('Invalid form data:', form.errors)  # Log the form validation errors
+            return jsonify({'error': 'Invalid form data'}), 400
+    except Exception as e:
+        db.session.rollback()
+        error_message = f'Error creating loan: {str(e)}'
+        print('Error creating loan:', error_message)  # Log the error message
+        return jsonify({'error': error_message}), 500
 
 # Route to end a loan
 @loans.route('/end/<int:loan_id>', methods=['POST'])

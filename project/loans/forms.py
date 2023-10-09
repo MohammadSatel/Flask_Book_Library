@@ -9,5 +9,5 @@ class CreateLoan(FlaskForm):
     book_name = StringField('Book Name', validators=[DataRequired()])
     loan_date = DateField('Loan Date', format='%Y-%m-%d', validators=[DataRequired()])
     return_date = DateField('Return Date', format='%Y-%m-%d', validators=[DataRequired()])
+    csrf_token = StringField('CSRF Token')  # Add a CSRF token field
     submit = SubmitField('Create Loan')
-

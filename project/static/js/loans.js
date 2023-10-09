@@ -57,25 +57,27 @@ function populateDropdown(elementId, data) {
     });
 }
 
+// Function to remove the selected book (simulate removal)
+function removeBook(bookId) {
+    console.log(`Book with ID ${bookId} removed.`);
+}
+
 // Function to handle loan submission
 function handleLoanSubmission(event) {
     event.preventDefault();
 
-    const loanDate = new Date(document.getElementById('loan_date').value);
-    const formattedLoanDate = loanDate.toISOString().split('T')[0];
-
-    const returnDate = new Date(document.getElementById('return_date').value);
-    const formattedReturnDate = returnDate.toISOString().split('T')[0];
-
     const bookId = document.getElementById('book_name').value;
     const customerName = document.getElementById('customer_name').value;
-
+    const loanDate = document.getElementById('loan_date').value;
+    const returnDate = document.getElementById('return_date').value;
+    
     const formData = {
         customer_name: customerName,
         book_id: bookId,
-        loan_date: formattedLoanDate,
-        return_date: formattedReturnDate
+        loan_date: loanDate,
+        return_date: returnDate
     };
+    
 
     // Fetch customer details based on selected customer
     fetchCustomerDetails(customerName)
@@ -85,6 +87,8 @@ function handleLoanSubmission(event) {
         })
         .then(function (response) {
             alert('Loan added successfully!');
+            // Remove the selected book (simulate removal)
+            removeBook(bookId);
             document.getElementById('addLoanModal').classList.remove('show');
             document.body.classList.remove('modal-open');
             location.reload();
@@ -95,25 +99,12 @@ function handleLoanSubmission(event) {
         });
 }
 
-// Document loaded event handler
-document.addEventListener('DOMContentLoaded', function () {
-    console.log('DOM content loaded. Fetching book and customer data...');
-
-    // Fetch books and populate the book dropdown
-    fetchBooks()
-        .then(function (books) {
-            populateDropdown('book_name', books);
-        });
-
-    // Fetch customers and populate the customer dropdown
-    fetchCustomers()
-        .then(function (customers) {
-            populateDropdown('customer_name', customers);
-        });
-
-    // Event listener for loan submission
+// Function to ensure DOM is fully loaded
+function setupEventListeners() {
     const addLoanForm = document.getElementById('addLoanForm');
-    addLoanForm.addEventListener('submit', handleLoanSubmission);
+    if (addLoanForm) {
+        addLoanForm.addEventListener('submit', handleLoanSubmission);
+    }
 
     const loanDateInput = document.getElementById('loan_date');
     const returnDateInput = document.getElementById('return_date');
@@ -127,4 +118,24 @@ document.addEventListener('DOMContentLoaded', function () {
         returnDateInput.type = 'date';
         returnDateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
     });
+}
+
+// Document loaded event handler
+document.addEventListener('DOMContentLoaded', function () {
+    console.log('DOM content loaded. Fetching book and customer data...');
+
+    // Fetch books and populate the book dropdown
+    fetchBooks()
+        .then(function (books) {
+            populateDropdown('book_name', books);
+        })
+        .then(function () {
+            return fetchCustomers();  // Fetch customers after books
+        })
+        .then(function (customers) {
+            populateDropdown('customer_name', customers);
+        })
+        .then(function () {
+            setupEventListeners();  // Setup event listeners after fetching data
+        });
 });
