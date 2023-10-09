@@ -1,5 +1,5 @@
 from flask import render_template, Blueprint, request, redirect, url_for, jsonify
-from project import db
+from project import customers, db
 from project.loans.models import Loan
 from project.loans.forms import CreateLoan
 from project.books.models import Book
@@ -34,6 +34,24 @@ def list_loans_json():
     loans = Loan.query.all()
     loan_list = [{'customer_name': loan.customer_name, 'book_name': loan.book_name, 'loan_date': loan.loan_date, 'return_date': loan.return_date} for loan in loans]
     return jsonify(loans=loan_list)
+
+
+# Route to get customer data by name in JSON format
+@customers.route('/details/<string:customer_name>', methods=['GET'])
+def get_customer_details(customer_name):
+    # Find the customer by their name
+    customer = Customer.query.filter_by(name=customer_name).first()
+
+    if customer:
+        customer_data = {
+            'id': customer.id,
+            'name': customer.name,
+            'city': customer.city,
+            'age': customer.age
+        }
+        return jsonify(customer=customer_data)
+    else:
+        return jsonify({'error': 'Customer not found'}), 404
 
 # Route to create a new loan
 @loans.route('/create', methods=['POST'])
