@@ -1,7 +1,13 @@
-<!-- loans.html -->
 {% extends 'base.html' %}
 
 {% block content %}
+
+
+
+<!-- Include loans.js -->
+<script src="{{ url_for('static', filename='js/loans.js') }}"></script>
+
+
     <div class="container">
         <h1 class="my-4">Loans</h1>
 
@@ -62,25 +68,25 @@
                     <form id="addLoanForm">
                         <div class="form-group">
                             <label for="customer_name">Customer Name</label>
-                            <select class="form-control" id="customer_name" required>
+                            <select class="form-control" id="customer_name" name="customer_name">
                                 <!-- Options will be populated dynamically by JavaScript -->
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="book_name">Book Name</label>
-                            <select class="form-control" id="book_name" required>
+                            <select class="form-control" id="book_name" name="book_name">
                                 <!-- Options will be populated dynamically by JavaScript -->
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="loan_date">Loan Date</label>
                             <!-- Use type="date" for a date picker -->
-                            <input type="date" class="form-control" id="loan_date" required>
+                            <input type="date" class="form-control" id="loan_date" name="loan_date" required>
                         </div>
                         <div class="form-group">
                             <label for="return_date">Return Date</label>
                             <!-- Use type="date" for a date picker -->
-                            <input type="date" class="form-control" id="return_date" required>
+                            <input type="date" class="form-control" id="return_date" name="return_date" required>
                         </div>
                         <button type="submit" class="btn btn-primary">Add Loan</button>
                     </form>
@@ -88,10 +94,8 @@
             </div>
         </div>
     </div>
+
+
+
+
 {% endblock %}
-
-<!-- Include loans.js -->
-<script src="{{ url_for('static', filename='js/loans.js') }}"></script>
-
-</body>
-</html>

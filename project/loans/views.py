@@ -8,6 +8,20 @@ from project.customers.models import Customer
 # Create a Blueprint for loans
 loans = Blueprint('loans', __name__, template_folder='templates', url_prefix='/loans')
 
+# Update the routes to provide book and customer data in JSON format
+@loans.route('/books/json', methods=['GET'])
+def list_books_json():
+    books = Book.query.all()
+    book_list = [{'name': book.name} for book in books]
+    return jsonify({'books': book_list})  # Wrap the book list in a dictionary
+
+
+@loans.route('/customers/json', methods=['GET'])
+def list_customers_json():
+    customers = Customer.query.all()
+    customer_list = [{'name': customer.name} for customer in customers]
+    return jsonify({'customers': customer_list})  # Wrap the customer list in a dictionary
+
 # Route to list all loans
 @loans.route('/', methods=['GET'])
 def list_loans():
@@ -20,20 +34,6 @@ def list_loans_json():
     loans = Loan.query.all()
     loan_list = [{'customer_name': loan.customer_name, 'book_name': loan.book_name, 'loan_date': loan.loan_date, 'return_date': loan.return_date} for loan in loans]
     return jsonify(loans=loan_list)
-
-# Route to get customer data in JSON format
-@loans.route('/customers/json', methods=['GET'])
-def list_customers_json():
-    customers = Customer.query.all()
-    customer_list = [{'name': customer.name} for customer in customers]
-    return jsonify(customers=customer_list)
-
-# Route to get book data in JSON format
-@loans.route('/books/json', methods=['GET'])
-def list_books_json():
-    books = Book.query.all()
-    book_list = [{'name': book.name} for book in books]
-    return jsonify(books=book_list)
 
 # Route to create a new loan
 @loans.route('/create', methods=['POST'])
