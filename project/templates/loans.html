@@ -37,8 +37,8 @@
                     <td>{{ loan.loan_date }}</td>
                     <td>{{ loan.return_date }}</td>
                     <td>
-                        <a href="#" class="btn btn-warning btn-sm">Edit</a>
-                        <button class="btn btn-danger btn-sm">Delete</button>
+                        <a href="#" class="btn btn-warning btn-sm edit-button" data-toggle="modal" data-target="#editLoanModal" data-loan-id="{{ loan.id }}">Edit</a>
+                        <button class="btn btn-danger btn-sm delete-button" data-loan-id="{{ loan.id }}">Delete</button>
                     </td>
                 </tr>
             {% endfor %}
@@ -90,6 +90,12 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- Edit loan Modal -->
+<div class="modal fade" id="editLoanModal" tabindex="-1" role="dialog" aria-labelledby="editLoanModalLabel" aria-hidden="true">
+    <!-- Modal content for editing a loan -->
+    <!-- Structure to be added by JavaScript -->
 </div>
 
 {% endblock %}

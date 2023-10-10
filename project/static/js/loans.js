@@ -57,11 +57,6 @@ function populateDropdown(elementId, data) {
     });
 }
 
-// Function to remove the selected book (simulate removal)
-function removeBook(bookId) {
-    console.log(`Book with ID ${bookId} removed.`);
-}
-
 // Function to handle loan submission
 function handleLoanSubmission(event) {
     event.preventDefault();
@@ -90,8 +85,6 @@ function handleLoanSubmission(event) {
         })
         .then(function (response) {
             alert('Loan added successfully!');
-            // Remove the selected book (simulate removal)
-            removeBook(bookId);
             document.getElementById('addLoanModal').classList.remove('show');
             document.body.classList.remove('modal-open');
             location.reload();
@@ -102,6 +95,54 @@ function handleLoanSubmission(event) {
         });
 }
 
+// Function to fetch loan details based on loan ID
+function fetchLoanDetails(loanId) {
+    return axios.get(`/loans/${loanId}/details`)
+        .then(function (response) {
+            return response.data.loan;  // Assuming the loan details are in response.data.loan
+        })
+        .catch(function (error) {
+            console.error('Error fetching loan details:', error);
+        });
+}
+
+// Function to handle editing a loan
+function handleLoanEdit(loanId) {
+    // Fetch loan details based on loan ID
+    fetchLoanDetails(loanId)
+        .then(function (loanDetails) {
+            // Populate the form fields with loan details
+            document.getElementById('customer_name').value = loanDetails.customer_name;
+            document.getElementById('book_name').value = loanDetails.book_name;
+            document.getElementById('loan_date').value = loanDetails.loan_date;
+            document.getElementById('return_date').value = loanDetails.return_date;
+        })
+        .catch(function (error) {
+            console.error('Error editing loan:', error);
+        });
+}
+
+// Function to delete a loan and return the book to the books database
+function deleteLoan(loanId) {
+    console.log('Delete button clicked for loan ID:', loanId);
+    axios.post(`/loans/${loanId}/delete`)
+        .then(function () {
+            console.log('Loan deleted successfully.');
+            alert('Loan deleted successfully.');
+            const deletedLoanRow = document.getElementById(`loan-${loanId}`);
+            if (deletedLoanRow) {
+                deletedLoanRow.remove();
+                location.reload();  // Refresh the page
+            }
+        })
+        .catch(function (error) {
+            console.error('Error deleting loan:', error);
+            alert('An error occurred while deleting the loan.');
+        });
+}
+
+
+
 // Function to ensure DOM is fully loaded
 function setupEventListeners() {
     const addLoanButton = document.getElementById('addLoanButton');
@@ -109,22 +150,25 @@ function setupEventListeners() {
     if (addLoanButton) {
         addLoanButton.addEventListener('click', handleLoanSubmission);
     }
-    
-    const loanDateInput = document.getElementById('loan_date');
-    const returnDateInput = document.getElementById('return_date');
 
-    loanDateInput.addEventListener('focus', function () {
-        loanDateInput.type = 'date';
-        loanDateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
+    const editButtons = document.querySelectorAll('.edit-button');
+    editButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            const loanId = button.dataset.loanId;
+            handleLoanEdit(loanId);
+        });
     });
 
-    returnDateInput.addEventListener('focus', function () {
-        returnDateInput.type = 'date';
-        returnDateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
+    const deleteButtons = document.querySelectorAll('.delete-button');
+    deleteButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            const loanId = button.dataset.loanId;
+            console.log('Delete button clicked for loan ID:', loanId);
+            deleteLoan(loanId);
+        });
     });
 }
 
-// Document loaded event handler
 document.addEventListener('DOMContentLoaded', function () {
     console.log('DOM content loaded. Fetching book and customer data...');
 
@@ -144,3 +188,4 @@ document.addEventListener('DOMContentLoaded', function () {
             setupEventListeners();
         });
 });
+

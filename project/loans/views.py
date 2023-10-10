@@ -181,19 +181,42 @@ def edit_loan(loan_id):
 # Route to delete a loan
 @loans.route('/<int:loan_id>/delete', methods=['POST'])
 def delete_loan(loan_id):
-    # Find the loan by ID
+    print(f"Attempting to delete loan with ID: {loan_id}")
     loan = Loan.query.get(loan_id)
     if not loan:
         return jsonify({'error': 'Loan not found'}), 404
 
     try:
-        # Delete the loan from the database
+        print("Attempting to delete loan...")
+        # Use Loan object attributes for book details
+        book = Book(name=loan.book_name, author=loan.customer_name, year_published=None, book_type=None)
+        book.status = 'available'
+        db.session.add(book)
         db.session.delete(loan)
         db.session.commit()
-        # Redirect to the list of loans
+        print("Loan deleted successfully.")
         return redirect(url_for('loans.list_loans'))
     except Exception as e:
         db.session.rollback()
-        error_message = f'Error deleting loan: {str(e)}'
-        print('Error deleting loan:', error_message)  # Log the error message
-        return jsonify({'error': error_message}), 500
+        print(f"Error deleting loan: {str(e)}")
+        return jsonify({'error': f'Error deleting loan: {str(e)}'}), 500
+
+# Route to fetch loan details by ID
+@loans.route('/<int:loan_id>/details', methods=['GET'])
+def get_loan_details(loan_id):
+    # Find the loan by ID
+    loan = Loan.query.get(loan_id)
+    
+    if loan:
+        # Create a dictionary with loan details
+        loan_data = {
+            'id': loan.id,
+            'customer_name': loan.customer_name,
+            'book_name': loan.book_name,
+            'loan_date': loan.loan_date,
+            'return_date': loan.return_date
+        }
+        # Return loan data in JSON format
+        return jsonify(loan=loan_data)
+    else:
+        return jsonify({'error': 'Loan not found'}), 404
