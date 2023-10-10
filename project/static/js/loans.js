@@ -84,10 +84,11 @@ function handleLoanSubmission(event) {
             return axios.post('/loans/create', formData);
         })
         .then(function (response) {
+            console.log('Loan added successfully!');
+            // Show success alert
             alert('Loan added successfully!');
-            document.getElementById('addLoanModal').classList.remove('show');
-            document.body.classList.remove('modal-open');
-            location.reload();
+
+
         })
         .catch(function (error) {
             console.error('Error adding loan:', error.response ? error.response.data : error.message);
@@ -95,16 +96,26 @@ function handleLoanSubmission(event) {
         });
 }
 
+
 // Function to fetch loan details based on loan ID
 function fetchLoanDetails(loanId) {
     return axios.get(`/loans/${loanId}/details`)
         .then(function (response) {
-            return response.data.loan;  // Assuming the loan details are in response.data.loan
+            const loanDetails = response.data.loan;
+
+            // Fetch book details based on book name
+            return fetchBookDetails(loanDetails.book_name)
+                .then(function (bookDetails) {
+                    loanDetails.book_details = bookDetails;
+                    return loanDetails;
+                });
         })
         .catch(function (error) {
             console.error('Error fetching loan details:', error);
+            throw error; // Propagate the error to be caught in deleteLoan function
         });
 }
+
 
 // Function to handle editing a loan
 function handleLoanEdit(loanId) {
@@ -125,14 +136,27 @@ function handleLoanEdit(loanId) {
 // Function to delete a loan and return the book to the books database
 function deleteLoan(loanId) {
     console.log('Delete button clicked for loan ID:', loanId);
-    axios.post(`/loans/${loanId}/delete`)
+
+    fetchLoanDetails(loanId)
+        .then(function (loanDetails) {
+            console.log('Loan details:', loanDetails);
+
+            const bookDetails = {
+                year_published: loanDetails.book_details.year_published,
+                book_type: loanDetails.book_details.book_type
+            };
+
+            console.log('Book details:', bookDetails);
+
+            return axios.post(`/loans/${loanId}/delete`, bookDetails);
+        })
         .then(function () {
             console.log('Loan deleted successfully.');
             alert('Loan deleted successfully.');
             const deletedLoanRow = document.getElementById(`loan-${loanId}`);
             if (deletedLoanRow) {
                 deletedLoanRow.remove();
-                location.reload();  // Refresh the page
+                alert('Loan deleted successfully.');
             }
         })
         .catch(function (error) {
@@ -140,6 +164,8 @@ function deleteLoan(loanId) {
             alert('An error occurred while deleting the loan.');
         });
 }
+
+
 
 
 

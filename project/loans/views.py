@@ -220,3 +220,23 @@ def get_loan_details(loan_id):
         return jsonify(loan=loan_data)
     else:
         return jsonify({'error': 'Loan not found'}), 404
+    
+    # Route to get book details by name in JSON format
+@loans.route('/books/details/<string:book_name>', methods=['GET'])
+def get_book_details(book_name):
+    # Find the book by its name
+    book = Book.query.filter_by(name=book_name).first()
+
+    if book:
+        # Create a dictionary with book details
+        book_data = {
+            'id': book.id,
+            'name': book.name,
+            'author': book.author,
+            'year_published': book.year_published,
+            'book_type': book.book_type
+        }
+        # Return book data in JSON format
+        return jsonify(book=book_data)
+    else:
+        return jsonify({'error': 'Book not found'}), 404
