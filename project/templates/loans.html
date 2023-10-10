@@ -60,7 +60,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="addLoanForm">
+                <form id="addLoanForm" action="/loans/create" method="POST">
+                    {{ form.hidden_tag() }}
+
                     <div class="form-group">
                         <label for="customer_name">Customer Name</label>
                         <select class="form-control" id="customer_name" name="customer_name">

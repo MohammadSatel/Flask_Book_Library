@@ -1,6 +1,6 @@
 // Function to fetch and log book data
 function fetchBooks() {
-    return axios.get('/books/json')
+    return axios.get('/loans/books/json')
         .then(function (response) {
             console.log('Books API response:', response.data.books);
             return response.data.books;  // Return books for further processing
@@ -12,7 +12,7 @@ function fetchBooks() {
 
 // Function to fetch and log customer data
 function fetchCustomers() {
-    return axios.get('/customers/json')
+    return axios.get('/loans/customers/json')
         .then(function (response) {
             console.log('Customers API response:', response.data.customers);
             return response.data.customers;  // Return customers for further processing
@@ -24,7 +24,7 @@ function fetchCustomers() {
 
 // Function to fetch customer details based on customer name
 function fetchCustomerDetails(customerName) {
-    return axios.get(`/customers/${customerName}/edit-data`)
+    return axios.get(`/loans/customers/details/${customerName}`)
         .then(function (response) {
             return response.data.customer;  // Assuming the customer details are in response.data.customer
         })
@@ -35,7 +35,7 @@ function fetchCustomerDetails(customerName) {
 
 // Function to fetch book details based on book name
 function fetchBookDetails(bookName) {
-    return axios.get(`/books/details/${bookName}`)
+    return axios.get(`/loans/books/details/${bookName}`)
         .then(function (response) {
             return response.data.book;  // Assuming the book details are in response.data.book
         })
@@ -66,18 +66,21 @@ function removeBook(bookId) {
 function handleLoanSubmission(event) {
     event.preventDefault();
 
-    const bookId = document.getElementById('book_name').value;
+    const bookName = document.getElementById('book_name').value;
     const customerName = document.getElementById('customer_name').value;
     const loanDate = document.getElementById('loan_date').value;
     const returnDate = document.getElementById('return_date').value;
-    
+
+    // Get CSRF token from the form
+    const csrfToken = document.getElementById('csrf_token').value;
+
     const formData = {
         customer_name: customerName,
-        book_id: bookId,
+        book_name: bookName,
         loan_date: loanDate,
-        return_date: returnDate
+        return_date: returnDate,
+        csrf_token: csrfToken  // Include CSRF token in the form data
     };
-    
 
     // Fetch customer details based on selected customer
     fetchCustomerDetails(customerName)
