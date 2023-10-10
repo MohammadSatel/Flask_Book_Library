@@ -101,11 +101,12 @@ function handleLoanSubmission(event) {
 
 // Function to ensure DOM is fully loaded
 function setupEventListeners() {
-    const addLoanForm = document.getElementById('addLoanForm');
-    if (addLoanForm) {
-        addLoanForm.addEventListener('submit', handleLoanSubmission);
-    }
+    const addLoanButton = document.getElementById('addLoanButton');
 
+    if (addLoanButton) {
+        addLoanButton.addEventListener('click', handleLoanSubmission);
+    }
+    
     const loanDateInput = document.getElementById('loan_date');
     const returnDateInput = document.getElementById('return_date');
 
@@ -136,6 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
             populateDropdown('customer_name', customers);
         })
         .then(function () {
-            setupEventListeners();  // Setup event listeners after fetching data
+            // Setup event listeners after fetching data
+            setupEventListeners();
         });
 });
