@@ -36,11 +36,12 @@ def list_loans():
     return render_template('loans.html', loans=loans, form=CreateLoan())
 
 # Route to handle loan creation form
-@loans.route('/create', methods=['POST'])
+# Route to handle loan creation form
+@loans.route('/create', methods=['GET', 'POST'])
 def create_loan():
     form = CreateLoan()
 
-    if form.validate_on_submit():
+    if request.method == 'POST' and form.validate():
         # Process form submission
         customer_name = form.customer_name.data
         book_name = form.book_name.data
@@ -57,23 +58,28 @@ def create_loan():
         if not customer:
             return jsonify({'error': 'Customer not found.'}), 400
 
-        # Create a new loan
-        new_loan = Loan(customer_name=customer_name, book_name=book_name, loan_date=loan_date, return_date=return_date)
+        try:
+            # Create a new loan
+            new_loan = Loan(customer_name=customer_name, book_name=book_name, loan_date=loan_date, return_date=return_date)
 
-        # Add the new loan to the database
-        db.session.add(new_loan)
-        db.session.commit()
+            # Update book status to 'not available' (i.e., remove from the books database)
+            db.session.delete(book)
 
-        # Update book status to 'loaned'
-        book.status = 'loaned'
-        db.session.commit()
+            # Add the new loan to the database
+            db.session.add(new_loan)
+            db.session.commit()
 
-        # Redirect to the list of loans
-        return redirect(url_for('loans.list_loans'))
-    
-    # Form validation failed, re-render the loans page
-    loans = Loan.query.all()
-    return render_template('loans.html', loans=loans, form=form)
+            # Redirect to the list of loans
+            return redirect(url_for('loans.list_loans'))
+        except Exception as e:
+            db.session.rollback()
+            error_message = f'Error creating loan: {str(e)}'
+            print('Error creating loan:', error_message)  # Log the error message
+            return jsonify({'error': error_message}), 500
+
+    # GET request, render the form
+    return render_template('loans.html', form=form)
+
 
 # Route to get loan data in JSON format
 @loans.route('/json', methods=['GET'])
