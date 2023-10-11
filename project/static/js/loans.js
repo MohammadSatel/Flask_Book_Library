@@ -58,7 +58,6 @@ function populateDropdown(elementId, data) {
 }
 
 // Function to handle loan submission
-// Function to handle loan submission
 function handleLoanSubmission(event) {
     event.preventDefault();
 
@@ -79,7 +78,9 @@ function handleLoanSubmission(event) {
     fetchCustomerDetails(customerName)
         .then(function (customerDetails) {
             formData.customer_details = customerDetails;
-            return axios.post('/loans/create', formData);
+
+            // Update the Axios POST request to use the correct URL
+            return axios.post('/loans', formData);  // Use '/loans' instead of '/loans/create'
         })
         .then(function (response) {
             console.log('Loan added successfully!');
@@ -96,6 +97,7 @@ function handleLoanSubmission(event) {
             alert('Error adding loan: ' + (error.response ? error.response.data.error : error.message));
         });
 }
+
 
 
 // Assuming you have a function to fetch and update the loans data

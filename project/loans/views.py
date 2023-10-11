@@ -37,7 +37,7 @@ def list_loans():
 
 
 # Route to handle loan creation form
-@loans.route('/create', methods=['POST'])
+@loans.route('/', methods=['POST'])
 def create_loan():
     form = CreateLoan()
 
