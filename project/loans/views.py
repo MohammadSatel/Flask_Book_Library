@@ -35,9 +35,9 @@ def list_loans():
     # Render the loans.html template with the loans
     return render_template('loans.html', loans=loans, form=CreateLoan())
 
+
 # Route to handle loan creation form
-# Route to handle loan creation form
-@loans.route('/create', methods=['GET', 'POST'])
+@loans.route('/create', methods=['POST'])
 def create_loan():
     form = CreateLoan()
 
@@ -69,8 +69,8 @@ def create_loan():
             db.session.add(new_loan)
             db.session.commit()
 
-            # Redirect to the list of loans
-            return redirect(url_for('loans.list_loans'))
+            # Return a JSON response indicating success
+            return jsonify({'message': 'Loan added successfully'}), 200
         except Exception as e:
             db.session.rollback()
             error_message = f'Error creating loan: {str(e)}'
@@ -91,6 +91,7 @@ def list_loans_json():
                   'loan_date': loan.loan_date, 'return_date': loan.return_date} for loan in loans]
     # Return loan data in JSON format
     return jsonify(loans=loan_list)
+
 
 # Route to get customer data by name in JSON format
 @loans.route('/customers/details/<string:customer_name>', methods=['GET'])

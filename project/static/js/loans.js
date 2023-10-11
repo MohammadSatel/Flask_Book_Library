@@ -58,6 +58,7 @@ function populateDropdown(elementId, data) {
 }
 
 // Function to handle loan submission
+// Function to handle loan submission
 function handleLoanSubmission(event) {
     event.preventDefault();
 
@@ -65,8 +66,6 @@ function handleLoanSubmission(event) {
     const customerName = document.getElementById('customer_name').value;
     const loanDate = document.getElementById('loan_date').value;
     const returnDate = document.getElementById('return_date').value;
-
-    // Get CSRF token from the form
     const csrfToken = document.getElementById('csrf_token').value;
 
     const formData = {
@@ -74,10 +73,9 @@ function handleLoanSubmission(event) {
         book_name: bookName,
         loan_date: loanDate,
         return_date: returnDate,
-        csrf_token: csrfToken  // Include CSRF token in the form data
+        csrf_token: csrfToken
     };
 
-    // Fetch customer details based on selected customer
     fetchCustomerDetails(customerName)
         .then(function (customerDetails) {
             formData.customer_details = customerDetails;
@@ -85,16 +83,33 @@ function handleLoanSubmission(event) {
         })
         .then(function (response) {
             console.log('Loan added successfully!');
-            // Show success alert
             alert('Loan added successfully!');
 
-
+            // Display the success message on the page
+            const successMessage = document.createElement('div');
+            successMessage.classList.add('alert', 'alert-success');
+            successMessage.textContent = 'Loan added successfully!';
+            document.getElementById('your-message-container').appendChild(successMessage);
         })
         .catch(function (error) {
             console.error('Error adding loan:', error.response ? error.response.data : error.message);
             alert('Error adding loan: ' + (error.response ? error.response.data.error : error.message));
         });
 }
+
+
+// Assuming you have a function to fetch and update the loans data
+function fetchLoansData() {
+    // Fetch and update loans data on the page
+    fetch('/loans/json')
+        .then(response => response.json())
+        .then(data => {
+            // Update the loans list on the page with the new data
+            // Implement this function based on your specific requirements
+        })
+        .catch(error => console.error('Error fetching loans data:', error));
+}
+
 
 
 // Function to fetch loan details based on loan ID
@@ -212,6 +227,8 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(function () {
             // Setup event listeners after fetching data
             setupEventListeners();
+        })
+        .catch(function (error) {
+            console.error('Error fetching data:', error);
         });
 });
-
