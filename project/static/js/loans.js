@@ -86,6 +86,10 @@ function handleLoanSubmission(event) {
             console.log('Loan added successfully!');
             alert('Loan added successfully!');
 
+            // Update book status to 'not available'
+            return axios.post(`/loans/${response.data.loan_id}/updateBookStatus`);
+        })
+        .then(function () {
             // Display the success message on the page
             const successMessage = document.createElement('div');
             successMessage.classList.add('alert', 'alert-success');
@@ -170,6 +174,11 @@ function deleteLoan(loanId) {
         .then(function () {
             console.log('Loan deleted successfully.');
             alert('Loan deleted successfully.');
+
+            // Update book status to 'available'
+            return axios.post(`/books/${loanDetails.book_name}/updateBookStatus`);
+        })
+        .then(function () {
             const deletedLoanRow = document.getElementById(`loan-${loanId}`);
             if (deletedLoanRow) {
                 deletedLoanRow.remove();
@@ -181,9 +190,6 @@ function deleteLoan(loanId) {
             alert('An error occurred while deleting the loan.');
         });
 }
-
-
-
 
 
 // Function to ensure DOM is fully loaded
