@@ -60,7 +60,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="addLoanForm" action="/loans" method="POST">
+                <form id="addLoanForm" action="/loans/create" method="POST">
                     {{ form.hidden_tag() }}
 
                     <div class="form-group">
@@ -91,6 +91,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- Edit loan Modal -->
 <div class="modal fade" id="editLoanModal" tabindex="-1" role="dialog" aria-labelledby="editLoanModalLabel" aria-hidden="true">

@@ -59,63 +59,34 @@ function populateDropdown(elementId, data) {
 
 // Function to handle loan submission
 function handleLoanSubmission(event) {
-    event.preventDefault();
-
-    const bookName = document.getElementById('book_name').value;
-    const customerName = document.getElementById('customer_name').value;
-    const loanDate = document.getElementById('loan_date').value;
-    const returnDate = document.getElementById('return_date').value;
-    const csrfToken = document.getElementById('csrf_token').value;
 
     const formData = {
-        customer_name: customerName,
-        book_name: bookName,
-        loan_date: loanDate,
-        return_date: returnDate,
-        csrf_token: csrfToken
+        customer_name: document.getElementById('customer_name').value,
+        book_name: document.getElementById('book_name').value,
+        loan_date: document.getElementById('loan_date').value,
+        return_date: document.getElementById('return_date').value,
+        csrf_token: document.getElementById('csrf_token').value
     };
 
-    fetchCustomerDetails(customerName)
+    fetchCustomerDetails(formData.customer_name)
         .then(function (customerDetails) {
             formData.customer_details = customerDetails;
 
-            // Update the Axios POST request to use the correct URL
-            return axios.post('/loans', formData);  // Use '/loans' instead of '/loans/create'
+            // Use axios to make an AJAX POST request
+            console.log('After Axios request.');
+            return axios.post('/loans/create', formData);
+
         })
         .then(function (response) {
             console.log('Loan added successfully!');
             alert('Loan added successfully!');
 
-            // Update book status to 'not available'
-            return axios.post(`/loans/${response.data.loan_id}/updateBookStatus`);
-        })
-        .then(function () {
-            // Display the success message on the page
-            const successMessage = document.createElement('div');
-            successMessage.classList.add('alert', 'alert-success');
-            successMessage.textContent = 'Loan added successfully!';
-            document.getElementById('your-message-container').appendChild(successMessage);
         })
         .catch(function (error) {
             console.error('Error adding loan:', error.response ? error.response.data : error.message);
             alert('Error adding loan: ' + (error.response ? error.response.data.error : error.message));
         });
 }
-
-
-
-// Assuming you have a function to fetch and update the loans data
-function fetchLoansData() {
-    // Fetch and update loans data on the page
-    fetch('/loans/json')
-        .then(response => response.json())
-        .then(data => {
-            // Update the loans list on the page with the new data
-            // Implement this function based on your specific requirements
-        })
-        .catch(error => console.error('Error fetching loans data:', error));
-}
-
 
 
 // Function to fetch loan details based on loan ID
@@ -174,11 +145,6 @@ function deleteLoan(loanId) {
         .then(function () {
             console.log('Loan deleted successfully.');
             alert('Loan deleted successfully.');
-
-            // Update book status to 'available'
-            return axios.post(`/books/${loanDetails.book_name}/updateBookStatus`);
-        })
-        .then(function () {
             const deletedLoanRow = document.getElementById(`loan-${loanId}`);
             if (deletedLoanRow) {
                 deletedLoanRow.remove();
@@ -191,11 +157,11 @@ function deleteLoan(loanId) {
         });
 }
 
-
 // Function to ensure DOM is fully loaded
 function setupEventListeners() {
-    const addLoanButton = document.getElementById('addLoanButton');
+    console.log('DOM content loaded. Fetching book and customer data...');
 
+    const addLoanButton = document.getElementById('addLoanButton');
     if (addLoanButton) {
         addLoanButton.addEventListener('click', handleLoanSubmission);
     }
@@ -209,6 +175,7 @@ function setupEventListeners() {
     });
 
     const deleteButtons = document.querySelectorAll('.delete-button');
+
     deleteButtons.forEach(function (button) {
         button.addEventListener('click', function () {
             const loanId = button.dataset.loanId;
@@ -218,25 +185,20 @@ function setupEventListeners() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    console.log('DOM content loaded. Fetching book and customer data...');
 
-    // Fetch books and populate the book dropdown
-    fetchBooks()
-        .then(function (books) {
-            populateDropdown('book_name', books);
-        })
-        .then(function () {
-            return fetchCustomers();  // Fetch customers after books
-        })
-        .then(function (customers) {
-            populateDropdown('customer_name', customers);
-        })
-        .then(function () {
-            // Setup event listeners after fetching data
-            setupEventListeners();
-        })
-        .catch(function (error) {
-            console.error('Error fetching data:', error);
-        });
-});
+// Fetch books and populate the book dropdown
+fetchBooks()
+    .then(function (books) {
+        populateDropdown('book_name', books);
+    })
+    .then(function () {
+        return fetchCustomers();  // Fetch customers after books
+    })
+    .then(function (customers) {
+        populateDropdown('customer_name', customers);
+    })
+    .then(function () {
+        // Setup event listeners after fetching data
+        setupEventListeners();
+    });
+

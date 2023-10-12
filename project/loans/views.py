@@ -35,9 +35,8 @@ def list_loans():
     # Render the loans.html template with the loans
     return render_template('loans.html', loans=loans, form=CreateLoan())
 
-
 # Route to handle loan creation form
-@loans.route('/', methods=['POST'])
+@loans.route('/create', methods=['POST'])
 def create_loan():
     form = CreateLoan()
 
@@ -53,24 +52,28 @@ def create_loan():
         if not book:
             return jsonify({'error': 'Book not available for loan.'}), 400
 
-        # Check if the customer exists
-        customer = Customer.query.filter_by(name=customer_name).first()
-        if not customer:
-            return jsonify({'error': 'Customer not found.'}), 400
-
         try:
-            # Create a new loan
-            new_loan = Loan(customer_name=customer_name, book_name=book_name, loan_date=loan_date, return_date=return_date)
-
-            # Update book status to 'not available' (i.e., remove from the books database)
-            db.session.delete(book)
+            # Create a new loan and store original book details
+            new_loan = Loan(
+                customer_name=customer_name,
+                book_name=book_name,
+                loan_date=loan_date,
+                return_date=return_date,
+                original_author=book.author,
+                original_year_published=book.year_published,
+                original_book_type=book.book_type
+            )
 
             # Add the new loan to the database
             db.session.add(new_loan)
             db.session.commit()
 
-            # Return a JSON response indicating success
-            return jsonify({'message': 'Loan added successfully'}), 200
+            # Remove the book from the database
+            db.session.delete(book)
+            db.session.commit()
+
+            # Redirect to the list of loans
+            return redirect(url_for('loans.list_loans'))
         except Exception as e:
             db.session.rollback()
             error_message = f'Error creating loan: {str(e)}'
@@ -91,7 +94,6 @@ def list_loans_json():
                   'loan_date': loan.loan_date, 'return_date': loan.return_date} for loan in loans]
     # Return loan data in JSON format
     return jsonify(loans=loan_list)
-
 
 # Route to get customer data by name in JSON format
 @loans.route('/customers/details/<string:customer_name>', methods=['GET'])
@@ -182,25 +184,34 @@ def edit_loan(loan_id):
 # Route to delete a loan
 @loans.route('/<int:loan_id>/delete', methods=['POST'])
 def delete_loan(loan_id):
-    print(f"Attempting to delete loan with ID: {loan_id}")
     loan = Loan.query.get(loan_id)
     if not loan:
         return jsonify({'error': 'Loan not found'}), 404
 
     try:
-        print("Attempting to delete loan...")
-        # Use Loan object attributes for book details
-        book = Book(name=loan.book_name, author=loan.customer_name, year_published=None, book_type=None)
-        book.status = 'available'
+        # Retrieve the book associated with the loan
+        book = Book(
+            name=loan.book_name,
+            author=loan.original_author,
+            year_published=loan.original_year_published,
+            book_type=loan.original_book_type,
+            status='available'  # Set the book status to 'available'
+        )
+
+        # Add the book to the database
         db.session.add(book)
+
+        # Delete the loan from the database
         db.session.delete(loan)
         db.session.commit()
-        print("Loan deleted successfully.")
+
+        # Redirect to the list of loans
         return redirect(url_for('loans.list_loans'))
     except Exception as e:
         db.session.rollback()
-        print(f"Error deleting loan: {str(e)}")
-        return jsonify({'error': f'Error deleting loan: {str(e)}'}), 500
+        error_message = f'Error deleting loan: {str(e)}'
+        print('Error deleting loan:', error_message)  # Log the error message
+        return jsonify({'error': error_message}), 500
 
 # Route to fetch loan details by ID
 @loans.route('/<int:loan_id>/details', methods=['GET'])
