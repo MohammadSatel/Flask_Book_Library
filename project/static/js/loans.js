@@ -130,11 +130,9 @@ function handleLoanEdit(loanId) {
         });
 }
 
-// Function to delete a loan and return the book to the books database
 function deleteLoan(loanId) {
-
     fetchLoanDetails(loanId)
-        .then(function (loanDetails) {
+        .then(loanDetails => {
             const bookDetails = {
                 name: loanDetails.book_name,
                 author: loanDetails.original_author,
@@ -142,22 +140,23 @@ function deleteLoan(loanId) {
                 book_type: loanDetails.original_book_type
             };
 
+            // Delete the loan and return the book to the books database
             return axios.post(`/loans/${loanId}/delete`, bookDetails);
         })
-        .then(function () {
-            console.log('Loan deleted successfully.');
+        .then(() => {
             alert('Loan deleted successfully.');
             const deletedLoanRow = document.getElementById(`loan-${loanId}`);
             if (deletedLoanRow) {
                 deletedLoanRow.remove();
-                alert('Loan deleted successfully.');
             }
-
-            // Add the book back to the books database
-            return axios.post('/books/create', bookDetails);
+            // Refresh the page or update the UI as needed
         })
-
+        .catch(error => {
+            console.error('Error deleting loan:', error);
+            alert('An error occurred while deleting the loan.');
+        });
 }
+
 
 
 // Function to ensure DOM is fully loaded

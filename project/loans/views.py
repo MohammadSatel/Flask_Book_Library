@@ -268,19 +268,33 @@ def get_loan_details(loan_id):
 
 @loans.route('/books/details/<string:book_name>', methods=['GET'])
 def get_book_details(book_name):
-    # Find the book by its name
-    book = Book.query.filter_by(name=book_name).first()
+    # First, check if the book is in the "loans" database
+    loaned_book = Loan.query.filter_by(book_name=book_name).first()
 
-    if book:
-        # Create a dictionary with book details
+    if loaned_book:
+        # Book is in "loans" database, return its details
         book_data = {
-            'id': book.id,
-            'name': book.name,
-            'author': book.author,
-            'year_published': book.year_published,
-            'book_type': book.book_type
+            'id': loaned_book.id,
+            'name': loaned_book.book_name,
+            'author': loaned_book.original_author,
+            'year_published': loaned_book.original_year_published,
+            'book_type': loaned_book.original_book_type
         }
-        # Return book data in JSON format
         return jsonify(book=book_data)
     else:
-        return jsonify({'error': 'Book not found'}), 404
+        # Book not found in "loans" database, proceed to check "books" database
+        book = Book.query.filter_by(name=book_name).first()
+
+        if book:
+            # Book found in "books" database, return its details
+            book_data = {
+                'id': book.id,
+                'name': book.name,
+                'author': book.author,
+                'year_published': book.year_published,
+                'book_type': book.book_type
+            }
+            return jsonify(book=book_data)
+        else:
+            # Book not found in both "loans" and "books" databases
+            return jsonify({'error': 'Book not found'}), 404
