@@ -115,20 +115,35 @@ function fetchLoanDetails(loanId) {
 
 
 // Function to handle editing a loan
-function handleLoanEdit(loanId) {
-    // Fetch loan details based on loan ID
-    fetchLoanDetails(loanId)
-        .then(function (loanDetails) {
-            // Populate the form fields with loan details
-            document.getElementById('customer_name').value = loanDetails.customer_name;
-            document.getElementById('book_name').value = loanDetails.book_name;
-            document.getElementById('loan_date').value = loanDetails.loan_date;
-            document.getElementById('return_date').value = loanDetails.return_date;
+function handleLoanEdit() {
+    const loanId = document.getElementById('edit_loan_id').value;
+    const editLoanDate = document.getElementById('edit_loan_date').value;
+    const editReturnDate = document.getElementById('edit_return_date').value;
+
+    // Collect any other updated information you need here...
+
+    const formData = new FormData();
+    formData.append('edit_loan_date', editLoanDate);
+    formData.append('edit_return_date', editReturnDate);
+
+    // Append other updated information to the formData...
+
+    axios.post(`/loans/${loanId}/edit`, formData)
+        .then(function (response) {
+            console.log('Loan edited successfully!');
+            // Reload the page or update the UI as needed
+            window.location.reload(); // Or update the UI to reflect the changes
         })
         .catch(function (error) {
             console.error('Error editing loan:', error);
         });
 }
+
+
+
+
+
+
 
 function deleteLoan(loanId) {
     fetchLoanDetails(loanId)

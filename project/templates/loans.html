@@ -97,8 +97,38 @@
 
 <!-- Edit loan Modal -->
 <div class="modal fade" id="editLoanModal" tabindex="-1" role="dialog" aria-labelledby="editLoanModalLabel" aria-hidden="true">
-    <!-- Modal content for editing a loan -->
-    <!-- Structure to be added by JavaScript -->
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editLoanModalLabel">Edit Loan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editLoanForm" action="" method="POST">
+                    {{ form.hidden_tag() }}
+                    <input type="hidden" id="edit_loan_id" name="edit_loan_id">
+
+                    <div class="form-group">
+                        <label for="edit_loan_date">Loan Date</label>
+                        <input type="date" class="form-control" id="edit_loan_date" name="edit_loan_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_return_date">Return Date</label>
+                        <input type="date" class="form-control" id="edit_return_date" name="edit_return_date" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <input type="hidden" id="edit_original_author" name="original_author">
+                    <input type="hidden" id="edit_original_year_published" name="original_year_published">
+                    <input type="hidden" id="edit_original_book_type" name="original_book_type">
+                                        
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 </div>
 
 {% endblock %}

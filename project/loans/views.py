@@ -116,9 +116,8 @@ def list_loans_json():
     # Return loan data in JSON format
     return jsonify(loans=loan_list)
 
+
 # Route to get customer data by name in JSON format
-
-
 @loans.route('/customers/details/<string:customer_name>', methods=['GET'])
 def get_customer_details(customer_name):
     # Find the customer by their name
@@ -175,9 +174,8 @@ def end_loan(loan_id):
         print('Error ending loan:', error_message)  # Log the error message
         return jsonify({'error': error_message}), 500
 
+
 # Route to edit a loan
-
-
 @loans.route('/<int:loan_id>/edit', methods=['POST'])
 def edit_loan(loan_id):
     # Find the loan by ID
@@ -187,27 +185,26 @@ def edit_loan(loan_id):
 
     form = CreateLoan(request.form)
 
-    if form.validate():
-        loan.customer_name = form.customer_name.data
-        loan.book_name = form.book_name.data
-        loan.loan_date = form.loan_date.data
-        loan.return_date = form.return_date.data
+    if not form.validate():
+        return jsonify({'error': 'Invalid form data'}), 400
 
-        try:
-            # Update the loan in the database
-            db.session.commit()
-            # Redirect to the list of loans
-            return redirect(url_for('loans.list_loans'))
-        except Exception as e:
-            db.session.rollback()
-            error_message = f'Error updating loan: {str(e)}'
-            # Log the error message
-            print('Error updating loan:', error_message)
-            return jsonify({'error': error_message}), 500
-    else:
-        error_message = 'Invalid form data'
-        print('Invalid form data:', error_message)  # Log the error message
-        return jsonify({'error': error_message}), 400
+    # Update loan information
+    loan.customer_name = form.customer_name.data
+    loan.book_name = form.book_name.data
+    loan.loan_date = form.loan_date.data
+    loan.return_date = form.return_date.data
+
+    try:
+        # Commit changes to the database
+        db.session.commit()
+        return redirect(url_for('loans.list_loans'))
+    except Exception as e:
+        db.session.rollback()
+        error_message = f'Error updating loan: {str(e)}'
+        print('Error updating loan:', error_message)
+        return jsonify({'error': error_message}), 500
+
+
 
 # Route to delete a loan
 @loans.route('/<int:loan_id>/delete', methods=['POST'])
