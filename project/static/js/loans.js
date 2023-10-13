@@ -59,12 +59,18 @@ function populateDropdown(elementId, data) {
 
 // Function to handle loan submission
 function handleLoanSubmission(event) {
+    const loanDate = new Date(document.getElementById('loan_date').value);
+    const returnDate = new Date(document.getElementById('return_date').value);
+
+    // Format loan date and return date to display only day, month, year
+    const formattedLoanDate = loanDate.toLocaleDateString('en-US');
+    const formattedReturnDate = returnDate.toLocaleDateString('en-US');
 
     const formData = {
         customer_name: document.getElementById('customer_name').value,
         book_name: document.getElementById('book_name').value,
-        loan_date: document.getElementById('loan_date').value,
-        return_date: document.getElementById('return_date').value,
+        loan_date: formattedLoanDate,
+        return_date: formattedReturnDate,
         csrf_token: document.getElementById('csrf_token').value
     };
 
@@ -75,18 +81,17 @@ function handleLoanSubmission(event) {
             // Use axios to make an AJAX POST request
             console.log('After Axios request.');
             return axios.post('/loans/create', formData);
-
         })
         .then(function (response) {
             console.log('Loan added successfully!');
             alert('Loan added successfully!');
-
         })
         .catch(function (error) {
             console.error('Error adding loan:', error.response ? error.response.data : error.message);
             alert('Error adding loan: ' + (error.response ? error.response.data.error : error.message));
         });
 }
+
 
 
 // Function to fetch loan details based on loan ID

@@ -6,8 +6,7 @@ from project.books.models import Book
 from project.customers.models import Customer
 
 # Create a Blueprint for loans
-loans = Blueprint('loans', __name__,
-                  template_folder='templates', url_prefix='/loans')
+loans = Blueprint('loans', __name__, template_folder='templates', url_prefix='/loans')
 
 # Update the routes to provide book and customer data in JSON format
 
@@ -52,7 +51,7 @@ def create_loan():
 
     form = CreateLoan()
 
-    if request.method == 'POST' and form.validate():
+    if request.method == 'POST':
         print('Form data:', request.form)
 
         # Process form submission
