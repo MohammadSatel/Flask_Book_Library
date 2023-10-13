@@ -85,7 +85,7 @@ function handleLoanSubmission(event) {
         })
         .then(function (response) {
             console.log('Loan added successfully!');
-                })
+        })
         .catch(function (error) {
             console.error('Error adding loan:', error.response ? error.response.data : error.message);
             alert('Error adding loan: ' + (error.response ? error.response.data.error : error.message));
@@ -149,7 +149,7 @@ function deleteLoan(loanId) {
             if (deletedLoanRow) {
                 deletedLoanRow.remove();
             }
-            // Refresh the page or update the UI as needed
+            window.location.reload();
         })
         .catch(error => {
             console.error('Error deleting loan:', error);
@@ -161,14 +161,14 @@ function deleteLoan(loanId) {
 
 // Function to ensure DOM is fully loaded
 function setupEventListeners() {
-    console.log('DOM content loaded. Fetching book and customer data...');
-
     const addLoanButton = document.getElementById('addLoanButton');
+
     if (addLoanButton) {
         addLoanButton.addEventListener('click', handleLoanSubmission);
     }
 
     const editButtons = document.querySelectorAll('.edit-button');
+
     editButtons.forEach(function (button) {
         button.addEventListener('click', function () {
             const loanId = button.dataset.loanId;
