@@ -1,14 +1,17 @@
 from flask import render_template, Blueprint, request, redirect, url_for, jsonify
-from project import db 
+from project import db
 from project.loans.models import Loan
 from project.loans.forms import CreateLoan
 from project.books.models import Book
 from project.customers.models import Customer
 
 # Create a Blueprint for loans
-loans = Blueprint('loans', __name__, template_folder='templates', url_prefix='/loans')
+loans = Blueprint('loans', __name__,
+                  template_folder='templates', url_prefix='/loans')
 
 # Update the routes to provide book and customer data in JSON format
+
+
 @loans.route('/books/json', methods=['GET'])
 def list_books_json():
     # Fetch all books from the database
@@ -18,9 +21,12 @@ def list_books_json():
     # Return book data in JSON format
     return jsonify({'books': book_list})
 
+
 @loans.route('/customers/json', methods=['GET'])
 def list_customers_json():
+
     # Fetch all customers from the database
+
     customers = Customer.query.all()
     # Create a list of customer names
     customer_list = [{'name': customer.name} for customer in customers]
@@ -28,6 +34,8 @@ def list_customers_json():
     return jsonify({'customers': customer_list})
 
 # Route to list all loans
+
+
 @loans.route('/', methods=['GET'])
 def list_loans():
     # Fetch all loans from the database
@@ -36,11 +44,17 @@ def list_loans():
     return render_template('loans.html', loans=loans, form=CreateLoan())
 
 # Route to handle loan creation form
+
+
 @loans.route('/create', methods=['POST'])
 def create_loan():
+    print('create_loan() function called')
+
     form = CreateLoan()
 
     if request.method == 'POST' and form.validate():
+        print('Form data:', request.form)
+
         # Process form submission
         customer_name = form.customer_name.data
         book_name = form.book_name.data
@@ -48,12 +62,15 @@ def create_loan():
         return_date = form.return_date.data
 
         # Check if the book is available
+        print('Check if the book is available')
         book = Book.query.filter_by(name=book_name, status='available').first()
         if not book:
+            print('Error. Book not available for loan.')
             return jsonify({'error': 'Book not available for loan.'}), 400
 
         try:
             # Create a new loan and store original book details
+            print('created new loan')
             new_loan = Loan(
                 customer_name=customer_name,
                 book_name=book_name,
@@ -65,22 +82,27 @@ def create_loan():
             )
 
             # Add the new loan to the database
+            print('added new loan to the database')
             db.session.add(new_loan)
             db.session.commit()
 
             # Remove the book from the database
+            print('removed book from the database')
             db.session.delete(book)
             db.session.commit()
 
             # Redirect to the list of loans
+            print('Redirect to the list of loans')
             return redirect(url_for('loans.list_loans'))
         except Exception as e:
             db.session.rollback()
             error_message = f'Error creating loan: {str(e)}'
-            print('Error creating loan:', error_message)  # Log the error message
+            # Log the error message
+            print('Error creating loan:', error_message)
             return jsonify({'error': error_message}), 500
 
     # GET request, render the form
+    print('GET request, render the form')
     return render_template('loans.html', form=form)
 
 
@@ -96,6 +118,8 @@ def list_loans_json():
     return jsonify(loans=loan_list)
 
 # Route to get customer data by name in JSON format
+
+
 @loans.route('/customers/details/<string:customer_name>', methods=['GET'])
 def get_customer_details(customer_name):
     # Find the customer by their name
@@ -115,6 +139,8 @@ def get_customer_details(customer_name):
         return jsonify({'error': 'Customer not found'}), 404
 
 # Route to end a loan
+
+
 @loans.route('/end/<int:loan_id>', methods=['POST'])
 def end_loan(loan_id):
     # Find the loan by ID
@@ -151,6 +177,8 @@ def end_loan(loan_id):
         return jsonify({'error': error_message}), 500
 
 # Route to edit a loan
+
+
 @loans.route('/<int:loan_id>/edit', methods=['POST'])
 def edit_loan(loan_id):
     # Find the loan by ID
@@ -174,7 +202,8 @@ def edit_loan(loan_id):
         except Exception as e:
             db.session.rollback()
             error_message = f'Error updating loan: {str(e)}'
-            print('Error updating loan:', error_message)  # Log the error message
+            # Log the error message
+            print('Error updating loan:', error_message)
             return jsonify({'error': error_message}), 500
     else:
         error_message = 'Invalid form data'
@@ -214,11 +243,13 @@ def delete_loan(loan_id):
         return jsonify({'error': error_message}), 500
 
 # Route to fetch loan details by ID
+
+
 @loans.route('/<int:loan_id>/details', methods=['GET'])
 def get_loan_details(loan_id):
     # Find the loan by ID
     loan = Loan.query.get(loan_id)
-    
+
     if loan:
         # Create a dictionary with loan details
         loan_data = {
@@ -232,8 +263,10 @@ def get_loan_details(loan_id):
         return jsonify(loan=loan_data)
     else:
         return jsonify({'error': 'Loan not found'}), 404
-    
+
     # Route to get book details by name in JSON format
+
+
 @loans.route('/books/details/<string:book_name>', methods=['GET'])
 def get_book_details(book_name):
     # Find the book by its name
