@@ -132,8 +132,7 @@ function handleLoanEdit(loanId) {
 
 // Function to delete a loan and return the book to the books database
 function deleteLoan(loanId) {
-    console.log('Delete button clicked for loan ID:', loanId);
-
+    
     fetchLoanDetails(loanId)
         .then(function (loanDetails) {
             console.log('Loan details:', loanDetails);
@@ -144,8 +143,6 @@ function deleteLoan(loanId) {
                 year_published: loanDetails.original_year_published,
                 book_type: loanDetails.original_book_type
             };
-
-            console.log('Book details:', bookDetails);
 
             return axios.post(`/loans/${loanId}/delete`, bookDetails);
         })
@@ -161,14 +158,14 @@ function deleteLoan(loanId) {
             // Add the book back to the books database
             return axios.post('/books/create', bookDetails);  // Assuming you have an endpoint to add a book
         })
-        .then(function () {
-            console.log('Book added back to the database.');
-            alert('Book added back to the database.');
-        })
-        .catch(function (error) {
-            console.error('Error deleting loan:', error);
-            alert('An error occurred while deleting the loan.');
-        });
+        // .then(function () {
+        //     console.log('Book added back to the database.');
+        //     alert('Book added back to the database.');
+        // })
+        // .catch(function (error) {
+        //     console.error('Error deleting loan:', error);
+        //     alert('An error occurred while deleting the loan.');
+        // });
 }
 
 
