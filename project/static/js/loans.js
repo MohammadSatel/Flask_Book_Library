@@ -127,27 +127,6 @@ function fetchLoanDetails(loanId) {
 }
 
 
-// Function to handle editing a loan
-function handleLoanEdit() {
-    const loanId = document.getElementById('edit_loan_id').value;
-    const editLoanDate = document.getElementById('edit_loan_date').value;
-    const editReturnDate = document.getElementById('edit_return_date').value;
-    const formData = new FormData();
-
-    formData.append('edit_loan_date', editLoanDate);
-    formData.append('edit_return_date', editReturnDate);
-
-    axios.post(`/loans/${loanId}/edit`, formData)
-        .then(function (response) {
-            console.log('Loan edited successfully!');
-            // Reload the page or update the UI as needed
-            window.location.reload(); // Or update the UI to reflect the changes
-        })
-        .catch(function (error) {
-            console.error('Error editing loan:', error);
-        });
-}
-
 // Function to handle deleting a loan
 function deleteLoan(loanId) {
     fetchLoanDetails(loanId)
@@ -183,14 +162,6 @@ function setupEventListeners() {
     if (addLoanButton) {
         addLoanButton.addEventListener('click', handleLoanSubmission);
     }
-
-    const editButtons = document.querySelectorAll('.edit-button');
-    editButtons.forEach(function (button) {
-        button.addEventListener('click', function () {
-            const loanId = button.dataset.loanId;
-            handleLoanEdit(loanId);
-        });
-    });
 
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
