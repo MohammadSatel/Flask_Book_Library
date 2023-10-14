@@ -12,6 +12,7 @@ const filterLoans = (searchTerm) => {
     });
 };
 
+
 // Function to fetch and log book data
 const fetchBooks = () => {
     return axios.get('/loans/books/json')
@@ -23,6 +24,7 @@ const fetchBooks = () => {
             console.error('Error fetching books:', error);
         });
 };
+
 
 // Function to fetch and log customer data
 const fetchCustomers = () => {
@@ -36,6 +38,7 @@ const fetchCustomers = () => {
         });
 };
 
+
 // Function to fetch customer details based on customer name
 const fetchCustomerDetails = (customerName) => {
     return axios.get(`/loans/customers/details/${customerName}`)
@@ -46,6 +49,7 @@ const fetchCustomerDetails = (customerName) => {
             console.error('Error fetching customer details:', error);
         });
 };
+
 
 // Function to fetch book details based on book name
 const fetchBookDetails = (bookName) => {
@@ -58,6 +62,7 @@ const fetchBookDetails = (bookName) => {
         });
 };
 
+
 // Function to populate dropdown options
 const populateDropdown = (elementId, data) => {
     const dropdown = document.getElementById(elementId);
@@ -66,11 +71,12 @@ const populateDropdown = (elementId, data) => {
 
     data.forEach(item => {
         const option = document.createElement('option');
-        option.value = item.name;  // Assuming 'name' is the property for the value
+        option.value = item.name;  
         option.textContent = item.name;
         dropdown.appendChild(option);
     });
 };
+
 
 // Function to handle loan submission
 const handleLoanSubmission = (event) => {
@@ -100,6 +106,7 @@ const handleLoanSubmission = (event) => {
         });
 };
 
+
 // Function to fetch loan details based on loan ID
 const fetchLoanDetails = (loanId) => {
     return axios.get(`/loans/${loanId}/details`)
@@ -115,9 +122,10 @@ const fetchLoanDetails = (loanId) => {
         })
         .catch(error => {
             console.error('Error fetching loan details:', error);
-            throw error; // Propagate the error to be caught in deleteLoan function
+            throw error; 
         });
 };
+
 
 // Function to handle deleting a loan
 const deleteLoan = (loanId) => {
@@ -146,6 +154,7 @@ const deleteLoan = (loanId) => {
             alert('An error occurred while deleting the loan.');
         });
 };
+
 
 // Function to ensure DOM is fully loaded
 const setupEventListeners = () => {

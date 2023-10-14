@@ -1,27 +1,21 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-// Function to handle search
-    function searchBooks() {
-        let input, filter, table, tr, td, i, j, txtValue;
-        input = document.getElementById("searchInput");
-        filter = input.value.toLowerCase();
-        table = document.querySelector(".table");
-        tr = table.getElementsByTagName("tr");
-        for (i = 1; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td");
-            let rowDisplay = false;
-            for (j = 0; j < td.length; j++) {
-                if (td[j]) {
-                    txtValue = td[j].textContent || td[j].innerText;
-                    if (txtValue.toLowerCase().indexOf(filter) > -1) {
-                        rowDisplay = true;
-                        break;
-                    }
-                }
+    // Function to handle search
+    const searchBooks = () => {
+        const input = document.getElementById("searchInput");
+        const filter = input.value.toLowerCase();
+        const table = document.querySelector(".table");
+        const tr = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < tr.length; i++) {
+            const tdName = tr[i].getElementsByTagName("td")[0]; // Assuming name is the first column
+            if (tdName) {
+                const txtValue = tdName.textContent || tdName.innerText;
+                const rowDisplay = txtValue.toLowerCase().includes(filter);
+                tr[i].style.display = rowDisplay ? "" : "none";
             }
-            tr[i].style.display = rowDisplay ? "" : "none";
         }
-    }
+    };
 
     const searchInput = document.getElementById("searchInput");
     if (searchInput) {
@@ -31,12 +25,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Function to handle hiding the add book modal
-    function hideAddBookModal() {
+    const hideAddBookModal = () => {
         $('#addBookModal').modal('hide');
-    }
+    };
 
     // Function to handle adding a new book
-    function addBook() {
+    const addBook = () => {
         const name = document.getElementById('name').value;
         const author = document.getElementById('author').value;
         const year_published = document.getElementById('year_published').value;
@@ -49,94 +43,80 @@ document.addEventListener("DOMContentLoaded", () => {
             book_type: book_type
         })
             .then(response => {
-                console.log('Success:', response.data);
+                console.log('Book added successfully!');
                 alert('Book added successfully!');
                 hideAddBookModal();
-                window.location.reload(); // Reload the page to show the updated book list
+                window.location.reload();
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Error adding book: ' + JSON.stringify(error.response)); // Log the complete error response
+                alert('Error adding book: ' + JSON.stringify(error.response));
             });
-    }
+    };
 
     const addBookForm = document.getElementById("addBookForm");
     if (addBookForm) {
-        addBookForm.addEventListener("submit", function (event) {
-            event.preventDefault(); // Prevent the default form submission
-            addBook(); // Call the addBook function to handle adding a new book
+        addBookForm.addEventListener("submit", event => {
+            event.preventDefault();
+            addBook();
         });
     } else {
         console.error("Element with ID 'addBookForm' not found.");
     }
 
-        // Function to fetch and update the book list
-    function fetchBookList() {
-        // Assuming there's a function named updateBookList to fetch and update the book list
-        updateBookList();
-    }
-
-    // Function to update the book list (replace this with your actual implementation)
-    function updateBookList() {
-        // Implement code to fetch and update the book list
-        // For demonstration purposes, let's just log a message
-        console.log('Book list updated.');
-    }
-
 
     // Function to handle editing a book
-    function editBook(bookId) {
-    axios.get(`/books/${bookId}/edit-data`)
-        .then(response => {
-            if (response.data.success) {
-                const book = response.data.book;
-                document.getElementById('edit_name').value = book.name;
-                document.getElementById('edit_author').value = book.author;
-                document.getElementById('edit_year_published').value = book.year_published;
-                document.getElementById('edit_book_type').value = book.book_type;
-
-                $('#editBookModal').modal('show');
-            } else {
-                alert('Error fetching book information: ' + response.data.error);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error fetching book information: ' + JSON.stringify(error.response));
-        });
-
-    const saveChangesButton = document.getElementById('saveEditBookButton');
-    saveChangesButton.addEventListener('click', () => {
-        const name = document.getElementById('edit_name').value;
-        const author = document.getElementById('edit_author').value;
-        const year_published = document.getElementById('edit_year_published').value;
-        const book_type = document.getElementById('edit_book_type').value;
-
-        axios.post(`/books/${bookId}/edit`, {
-            name: name,
-            author: author,
-            year_published: year_published,
-            book_type: book_type
-        })
+    const editBook = (bookId) => {
+        axios.get(`/books/${bookId}/edit-data`)
             .then(response => {
-                console.log('Success:', response.data);
-                alert('Book edited successfully!');
-                $('#editBookModal').modal('hide');
-                window.location.reload(); // Reload the page after successful edit
+                if (response.data.success) {
+                    const book = response.data.book;
+                    document.getElementById('edit_name').value = book.name;
+                    document.getElementById('edit_author').value = book.author;
+                    document.getElementById('edit_year_published').value = book.year_published;
+                    document.getElementById('edit_book_type').value = book.book_type;
+
+                    $('#editBookModal').modal('show');
+                } else {
+                    alert('Error fetching book information: ' + response.data.error);
+                }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Error editing book: ' + JSON.stringify(error.response));
+                alert('Error fetching book information: ' + JSON.stringify(error.response));
             });
-    });
-}
 
+        const saveChangesButton = document.getElementById('saveEditBookButton');
+        saveChangesButton.addEventListener('click', () => {
+            const name = document.getElementById('edit_name').value;
+            const author = document.getElementById('edit_author').value;
+            const year_published = document.getElementById('edit_year_published').value;
+            const book_type = document.getElementById('edit_book_type').value;
+
+            axios.post(`/books/${bookId}/edit`, {
+                name: name,
+                author: author,
+                year_published: year_published,
+                book_type: book_type
+            })
+                .then(response => {
+                    console.log('Success:', response.data);
+                    alert('Book edited successfully!');
+                    $('#editBookModal').modal('hide');
+                    window.location.reload();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error editing book: ' + JSON.stringify(error.response));
+                });
+        });
+    };
 
     // Function to handle deleting a book
-    function deleteBook(bookId) {
+    const deleteBook = (bookId) => {
         axios.post(`/books/${bookId}/delete`)
             .then(response => {
-                console.log('Success:', response.data);
+                console.log('Book deleted successfully!');
                 alert('Book deleted successfully!');
                 location.reload();
             })
@@ -144,10 +124,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.log('Error:', error);
                 alert('Error deleting book: ' + error.response.data.error);
             });
-    }
+    };
 
     // Attach editBook and deleteBook to the global window object
     window.editBook = editBook;
     window.deleteBook = deleteBook;
 });
-

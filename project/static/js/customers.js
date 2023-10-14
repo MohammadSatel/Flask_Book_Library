@@ -16,8 +16,6 @@ const searchCustomers = () => {
 };
 
 
-
-
 // Event listener for search input
 document.getElementById("searchInput").addEventListener("input", searchCustomers);
 
@@ -27,8 +25,8 @@ $(document).ready(() => {
 
         // Get form data
         const name = $('#name').val();
-        const city = $('#city').val(); // Updated to get city from the form
-        const age = $('#age').val(); // Updated to get age from the form
+        const city = $('#city').val(); 
+        const age = $('#age').val(); 
 
         // Send an AJAX request to create a new customer
         $.ajax({
@@ -36,8 +34,8 @@ $(document).ready(() => {
             method: 'POST',
             data: {
                 name: name,
-                city: city, // Updated to send 'city'
-                age: age // Updated to send 'age'
+                city: city, 
+                age: age 
             },
             success: () => {
                 console.log('Customer added successfully!');
@@ -95,7 +93,8 @@ const editCustomer = customerId => {
     });
 };
 
-// Arrow function to handle delete customer
+
+// Function to handle delete customer
 const deleteCustomer = (customerId) => {
     $.ajax({
         url: `/customers/${customerId}/delete`,
@@ -111,6 +110,7 @@ const deleteCustomer = (customerId) => {
         }
     });
 };
+
 
 // Event listener for the edit form submission
 $(document).ready(() => {
