@@ -1,5 +1,5 @@
 import os
-from flask import Flask, send_from_directory
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
@@ -21,7 +21,6 @@ Migrate(app, db)
 
 
 # REGISTER BLUEPRINTS
-
 from project.core.views import core
 from project.books.views import books
 from project.customers.views import customers
