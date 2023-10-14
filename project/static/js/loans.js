@@ -1,3 +1,29 @@
+// Function to handle search
+function searchCustomers() {
+    let input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("searchInput");
+    filter = input.value.toLowerCase();
+    table = document.querySelector(".table");
+    tr = table.getElementsByTagName("tr");
+    for (i = 1; i < tr.length; i++) {
+        // Change the loop range to consider only the relevant columns (book and customer name)
+        for (let j = 0; j <= 1; j++) {
+            td = tr[i].getElementsByTagName("td")[j];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    break;  // If a match is found, no need to check other columns
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+}
+
+
+
 // Function to fetch and log book data
 function fetchBooks() {
     return axios.get('/loans/books/json')
@@ -48,6 +74,7 @@ function fetchBookDetails(bookName) {
 }
 
 
+
 // Function to populate dropdown options
 function populateDropdown(elementId, data) {
     const dropdown = document.getElementById(elementId);
@@ -65,6 +92,7 @@ function populateDropdown(elementId, data) {
 
 // Function to handle loan submission
 function handleLoanSubmission(event) {
+    
     const loanDate = new Date(document.getElementById('loan_date').value);
     const returnDate = new Date(document.getElementById('return_date').value);
 
@@ -85,6 +113,8 @@ function handleLoanSubmission(event) {
         })
         .then(function (response) {
             console.log('Loan added successfully!');
+            alert('Loan added successfully!');
+
         })
         .catch(function (error) {
             console.error('Error adding loan:', error.response ? error.response.data : error.message);
@@ -144,7 +174,7 @@ function handleLoanEdit() {
 
 
 
-
+// function to delete a loan
 function deleteLoan(loanId) {
     fetchLoanDetails(loanId)
         .then(loanDetails => {
