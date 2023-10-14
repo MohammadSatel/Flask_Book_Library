@@ -1,32 +1,28 @@
 // Function to handle search
-function searchCustomers() {
-    let input, filter, table, tr, td, i, j, txtValue;
+const searchCustomers = () => {
+    let input, filter, table, tr, td, i, txtValue;
     input = document.getElementById("searchInput");
     filter = input.value.toLowerCase();
     table = document.querySelector(".table");
     tr = table.getElementsByTagName("tr");
     for (i = 1; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td");
-        let rowDisplay = false;
-        for (j = 0; j < td.length; j++) {
-            if (td[j]) {
-                txtValue = td[j].textContent || td[j].innerText;
-                if (txtValue.toLowerCase().indexOf(filter) > -1) {
-                    rowDisplay = true;
-                    break;
-                }
-            }
+        td = tr[i].getElementsByTagName("td")[0]; // Use only the first column (names)
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            // Check if the text contains the search filter
+            tr[i].style.display = txtValue.toLowerCase().includes(filter) ? "" : "none";
         }
-        tr[i].style.display = rowDisplay ? "" : "none";
     }
-}
+};
+
+
+
 
 // Event listener for search input
 document.getElementById("searchInput").addEventListener("input", searchCustomers);
 
-// Handle form submission for adding a new customer
-$(document).ready(function() {
-    $('#addCustomerForm').submit(function(event) {
+$(document).ready(() => {
+    $('#addCustomerForm').submit(event => {
         event.preventDefault();  // Prevent the default form submission
 
         // Get form data
@@ -43,9 +39,8 @@ $(document).ready(function() {
                 city: city, // Updated to send 'city'
                 age: age // Updated to send 'age'
             },
-            success: function(response) {
-                console.log('Success:', response);
-                // Display a success notification
+            success: () => {
+                console.log('Customer added successfully!');
                 alert('Customer added successfully!');
 
                 // Close the modal
@@ -54,7 +49,7 @@ $(document).ready(function() {
                 // Reload the page to show the updated Customer list
                 location.reload();
             },
-            error: function(error) {
+            error: error => {
                 console.log('Error:', error);
                 // Display an error notification
                 alert('Error adding customer: ' + error.responseJSON.error);
@@ -63,15 +58,16 @@ $(document).ready(function() {
     });
 });
 
+
 // Function to handle edit customer
-function editCustomer(customerId) {
+const editCustomer = customerId => {
     console.log('Edit button clicked for customer ID:', customerId);
 
     // Fetch the existing customer data for the given customerId via an AJAX request
     $.ajax({
         url: `/customers/${customerId}/edit-data`,
         method: 'GET',
-        success: function(response) {
+        success: response => {
             console.log('Success:', response);
 
             if (response.success) {
@@ -92,17 +88,34 @@ function editCustomer(customerId) {
                 alert('Error fetching customer data: ' + response.error);
             }
         },
-        error: function(xhr, textStatus, errorThrown) {
+        error: (xhr, textStatus, errorThrown) => {
             console.log('Error:', errorThrown);
             alert('Error fetching customer data: ' + errorThrown);
         }
     });
-}
+};
+
+// Arrow function to handle delete customer
+const deleteCustomer = (customerId) => {
+    $.ajax({
+        url: `/customers/${customerId}/delete`,
+        method: 'POST',
+        success: () => {
+            console.log('Customer deleted successfully!');
+            alert('Customer deleted successfully!');
+            location.reload();
+        },
+        error: (error) => {
+            console.log('Error:', error);
+            alert('Error deleting customer: ' + error.responseJSON.error);
+        }
+    });
+};
 
 // Event listener for the edit form submission
-$(document).ready(function() {
-    $('#saveEditCustomerButton').click(function(event) {
-        const customerId = $(this).attr('data-customer-id');
+$(document).ready(() => {
+    $('#saveEditCustomerButton').click((event) => {
+        const customerId = $(event.target).attr('data-customer-id');
 
         // Get form data
         const name = $('#edit_name').val();
@@ -118,13 +131,13 @@ $(document).ready(function() {
                 city: city,
                 age: age
             },
-            success: function(response) {
-                console.log('Success:', response);
+            success: () => {
+                console.log('Customer updated successfully!');
                 alert('Customer updated successfully!');
                 $('#editCustomerModal').modal('hide');
                 location.reload();
             },
-            error: function(xhr, textStatus, errorThrown) {
+            error: (xhr, textStatus, errorThrown) => {
                 console.log('Error:', errorThrown);
                 alert('Error updating customer: ' + errorThrown);
             }
@@ -132,19 +145,3 @@ $(document).ready(function() {
     });
 });
 
-// DELETE CUSTOMER
-function deleteCustomer(customerId) {
-    $.ajax({
-        url: `/customers/${customerId}/delete`,
-        method: 'POST',
-        success: function(response) {
-            console.log('Success:', response);
-            alert('Customer deleted successfully!');
-            location.reload();
-        },
-        error: function(error) {
-            console.log('Error:', error);
-            alert('Error deleting customer: ' + error.responseJSON.error);
-        }
-    });
-}
