@@ -1,3 +1,18 @@
+// Function to filter loans based on search input
+function filterLoans(searchTerm) {
+    const tableRows = document.querySelectorAll('tbody tr');
+    tableRows.forEach(row => {
+        const customerName = row.querySelector('td:first-child').textContent.toLowerCase();
+        const bookName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+        if (customerName.includes(searchTerm) || bookName.includes(searchTerm)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+
 // Function to fetch and log book data
 function fetchBooks() {
     return axios.get('/loans/books/json')
@@ -79,7 +94,6 @@ function handleLoanSubmission(event) {
     fetchCustomerDetails(formData.customer_name)
         .then(function (customerDetails) {
             formData.customer_details = customerDetails;
-
             // Use axios to make an AJAX POST request
             return axios.post('/loans/create', formData);
         })
@@ -118,14 +132,10 @@ function handleLoanEdit() {
     const loanId = document.getElementById('edit_loan_id').value;
     const editLoanDate = document.getElementById('edit_loan_date').value;
     const editReturnDate = document.getElementById('edit_return_date').value;
-
-    // Collect any other updated information you need here...
-
     const formData = new FormData();
+
     formData.append('edit_loan_date', editLoanDate);
     formData.append('edit_return_date', editReturnDate);
-
-    // Append other updated information to the formData...
 
     axios.post(`/loans/${loanId}/edit`, formData)
         .then(function (response) {
@@ -137,7 +147,6 @@ function handleLoanEdit() {
             console.error('Error editing loan:', error);
         });
 }
-
 
 // Function to handle deleting a loan
 function deleteLoan(loanId) {
@@ -171,13 +180,11 @@ function deleteLoan(loanId) {
 // Function to ensure DOM is fully loaded
 function setupEventListeners() {
     const addLoanButton = document.getElementById('addLoanButton');
-
     if (addLoanButton) {
         addLoanButton.addEventListener('click', handleLoanSubmission);
     }
 
     const editButtons = document.querySelectorAll('.edit-button');
-
     editButtons.forEach(function (button) {
         button.addEventListener('click', function () {
             const loanId = button.dataset.loanId;
@@ -185,8 +192,15 @@ function setupEventListeners() {
         });
     });
 
-    const deleteButtons = document.querySelectorAll('.delete-button');
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', function () {
+            const searchTerm = searchInput.value.toLowerCase();
+            filterLoans(searchTerm);
+        });
+    }
 
+    const deleteButtons = document.querySelectorAll('.delete-button');
     deleteButtons.forEach(function (button) {
         button.addEventListener('click', function () {
             const loanId = button.dataset.loanId;
@@ -212,4 +226,3 @@ fetchBooks()
         // Setup event listeners after fetching data
         setupEventListeners();
     });
-

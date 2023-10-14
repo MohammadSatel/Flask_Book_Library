@@ -5,13 +5,12 @@ from project.loans.forms import CreateLoan
 from project.books.models import Book
 from project.customers.models import Customer
 
-
 # Create a Blueprint for loans
-loans = Blueprint('loans', __name__,
-                  template_folder='templates', url_prefix='/loans')
+loans = Blueprint('loans', __name__, template_folder='templates', url_prefix='/loans')
+
+# Update the routes to provide book and customer data in JSON format
 
 
-# Route to provide books data in JSON format
 @loans.route('/books/json', methods=['GET'])
 def list_books_json():
     # Fetch all books from the database
@@ -22,18 +21,20 @@ def list_books_json():
     return jsonify({'books': book_list})
 
 
-# Route to provide customers data in JSON format
 @loans.route('/customers/json', methods=['GET'])
 def list_customers_json():
+
     # Fetch all customers from the database
+
     customers = Customer.query.all()
     # Create a list of customer names
     customer_list = [{'name': customer.name} for customer in customers]
     # Return customer data in JSON format
     return jsonify({'customers': customer_list})
 
-
 # Route to list all loans
+
+
 @loans.route('/', methods=['GET'])
 def list_loans():
     # Fetch all loans from the database
@@ -41,8 +42,9 @@ def list_loans():
     # Render the loans.html template with the loans
     return render_template('loans.html', loans=loans, form=CreateLoan())
 
-
 # Route to handle loan creation form
+
+
 @loans.route('/create', methods=['POST'])
 def create_loan():
     print('create_loan() function called')
@@ -134,8 +136,9 @@ def get_customer_details(customer_name):
     else:
         return jsonify({'error': 'Customer not found'}), 404
 
-
 # Route to end a loan
+
+
 @loans.route('/end/<int:loan_id>', methods=['POST'])
 def end_loan(loan_id):
     # Find the loan by ID
@@ -202,6 +205,7 @@ def edit_loan(loan_id):
         return jsonify({'error': error_message}), 500
 
 
+
 # Route to delete a loan
 @loans.route('/<int:loan_id>/delete', methods=['POST'])
 def delete_loan(loan_id):
@@ -234,8 +238,9 @@ def delete_loan(loan_id):
         print('Error deleting loan:', error_message)  # Log the error message
         return jsonify({'error': error_message}), 500
 
-
 # Route to fetch loan details by ID
+
+
 @loans.route('/<int:loan_id>/details', methods=['GET'])
 def get_loan_details(loan_id):
     # Find the loan by ID
@@ -255,8 +260,9 @@ def get_loan_details(loan_id):
     else:
         return jsonify({'error': 'Loan not found'}), 404
 
+    # Route to get book details by name in JSON format
 
-# Route to get book details by name in JSON format
+
 @loans.route('/books/details/<string:book_name>', methods=['GET'])
 def get_book_details(book_name):
     # First, check if the book is in the "loans" database
