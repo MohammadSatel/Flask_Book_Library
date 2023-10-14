@@ -1,5 +1,5 @@
 // Function to filter loans based on search input
-function filterLoans(searchTerm) {
+const filterLoans = (searchTerm) => {
     const tableRows = document.querySelectorAll('tbody tr');
     tableRows.forEach(row => {
         const customerName = row.querySelector('td:first-child').textContent.toLowerCase();
@@ -10,76 +10,70 @@ function filterLoans(searchTerm) {
             row.style.display = 'none';
         }
     });
-}
-
+};
 
 // Function to fetch and log book data
-function fetchBooks() {
+const fetchBooks = () => {
     return axios.get('/loans/books/json')
-        .then(function (response) {
+        .then(response => {
             console.log('Books API response:', response.data.books);
             return response.data.books;  // Return books for further processing
         })
-        .catch(function (error) {
+        .catch(error => {
             console.error('Error fetching books:', error);
         });
-}
-
+};
 
 // Function to fetch and log customer data
-function fetchCustomers() {
+const fetchCustomers = () => {
     return axios.get('/loans/customers/json')
-        .then(function (response) {
+        .then(response => {
             console.log('Customers API response:', response.data.customers);
             return response.data.customers;
         })
-        .catch(function (error) {
+        .catch(error => {
             console.error('Error fetching customers:', error);
         });
-}
-
+};
 
 // Function to fetch customer details based on customer name
-function fetchCustomerDetails(customerName) {
+const fetchCustomerDetails = (customerName) => {
     return axios.get(`/loans/customers/details/${customerName}`)
-        .then(function (response) {
+        .then(response => {
             return response.data.customer;
         })
-        .catch(function (error) {
+        .catch(error => {
             console.error('Error fetching customer details:', error);
         });
-}
-
+};
 
 // Function to fetch book details based on book name
-function fetchBookDetails(bookName) {
+const fetchBookDetails = (bookName) => {
     return axios.get(`/loans/books/details/${bookName}`)
-        .then(function (response) {
+        .then(response => {
             return response.data.book;
         })
-        .catch(function (error) {
+        .catch(error => {
             console.error('Error fetching book details:', error);
         });
-}
-
+};
 
 // Function to populate dropdown options
-function populateDropdown(elementId, data) {
+const populateDropdown = (elementId, data) => {
     const dropdown = document.getElementById(elementId);
 
     dropdown.innerHTML = '';
 
-    data.forEach(function (item) {
+    data.forEach(item => {
         const option = document.createElement('option');
         option.value = item.name;  // Assuming 'name' is the property for the value
         option.textContent = item.name;
         dropdown.appendChild(option);
     });
-}
-
+};
 
 // Function to handle loan submission
-function handleLoanSubmission(event) {
+const handleLoanSubmission = (event) => {
     const loanDate = new Date(document.getElementById('loan_date').value);
     const returnDate = new Date(document.getElementById('return_date').value);
 
@@ -92,43 +86,41 @@ function handleLoanSubmission(event) {
     };
 
     fetchCustomerDetails(formData.customer_name)
-        .then(function (customerDetails) {
+        .then(customerDetails => {
             formData.customer_details = customerDetails;
             // Use axios to make an AJAX POST request
             return axios.post('/loans/create', formData);
         })
-        .then(function (response) {
+        .then(response => {
             console.log('Loan added successfully!');
         })
-        .catch(function (error) {
+        .catch(error => {
             console.error('Error adding loan:', error.response ? error.response.data : error.message);
             alert('Error adding loan: ' + (error.response ? error.response.data.error : error.message));
         });
-}
-
+};
 
 // Function to fetch loan details based on loan ID
-function fetchLoanDetails(loanId) {
+const fetchLoanDetails = (loanId) => {
     return axios.get(`/loans/${loanId}/details`)
-        .then(function (response) {
+        .then(response => {
             const loanDetails = response.data.loan;
 
             // Fetch book details based on book name
             return fetchBookDetails(loanDetails.book_name)
-                .then(function (bookDetails) {
+                .then(bookDetails => {
                     loanDetails.book_details = bookDetails;
                     return loanDetails;
                 });
         })
-        .catch(function (error) {
+        .catch(error => {
             console.error('Error fetching loan details:', error);
             throw error; // Propagate the error to be caught in deleteLoan function
         });
-}
-
+};
 
 // Function to handle deleting a loan
-function deleteLoan(loanId) {
+const deleteLoan = (loanId) => {
     fetchLoanDetails(loanId)
         .then(loanDetails => {
             const bookDetails = {
@@ -153,11 +145,10 @@ function deleteLoan(loanId) {
             console.error('Error deleting loan:', error);
             alert('An error occurred while deleting the loan.');
         });
-}
-
+};
 
 // Function to ensure DOM is fully loaded
-function setupEventListeners() {
+const setupEventListeners = () => {
     const addLoanButton = document.getElementById('addLoanButton');
     if (addLoanButton) {
         addLoanButton.addEventListener('click', handleLoanSubmission);
@@ -165,21 +156,21 @@ function setupEventListeners() {
 
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
-        searchInput.addEventListener('input', function () {
+        searchInput.addEventListener('input', () => {
             const searchTerm = searchInput.value.toLowerCase();
             filterLoans(searchTerm);
         });
     }
 
     const deleteButtons = document.querySelectorAll('.delete-button');
-    deleteButtons.forEach(function (button) {
-        button.addEventListener('click', function () {
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', () => {
             const loanId = button.dataset.loanId;
             console.log('Delete button clicked for loan ID:', loanId);
             deleteLoan(loanId);
         });
     });
-}
+};
 
 
 // Fetch books and populate the book dropdown
