@@ -1,12 +1,13 @@
 # 📚 Book Library App 📚
 
-Python full stack book library application. 
-Full modularity, each entity has its own files (forms.py, models.py, views.py, HTML, CSS, JS)
+- Python Flask full stack book library application with full modularity.
+- Each entity has its own files seperated (forms.py, models.py, views.py, HTML, CSS, JavaScript).
+- Database will be generated and updated automatically.
 
 
 ## 🚀 Features 🚀
 
-- **Librarian Dashboard:**
+- **Dashboard:**
   - Read, add, edit, and delete books.
   - Read, add, edit, and delete customers.
   - Read, add and delete loans.
