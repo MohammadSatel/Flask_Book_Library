@@ -1,17 +1,15 @@
 # 📚 Book Library App 📚
 
-[![Build Status](<YOUR_BUILD_STATUS_BADGE_URL>)](<YOUR_BUILD_STATUS_LINK>)
-[![License](<YOUR_LICENSE_BADGE_URL>)](<YOUR_LICENSE_LINK>)
-
 A full stack Python application for efficiently managing a book library.
 This app is designed for librarians and secretaries for streamlined book management.
+Feel free to use this app as you wish
 
 ## 🚀 Features 🚀
 
 - **Librarian Dashboard:**
-  - Add, read, edit, and delete books.
-  - Add, read, edit, and delete customers.
-  - Add, read, edit, and delete loans.
+  - Read, add, edit, and delete books.
+  - Read, add, edit, and delete customers.
+  - Read, add and delete loans.
 
 - **Search Functionality:**
   - Easily search for books by name.
@@ -28,6 +26,7 @@ This app is designed for librarians and secretaries for streamlined book managem
   - CSS
   - Bootstrap
   - JavaScript
+  - Axios
 
 - **Backend:**
   - Python
@@ -35,6 +34,7 @@ This app is designed for librarians and secretaries for streamlined book managem
   - JSON
 
 - **Database:**
+  - SQL
   - SQLAlchemy
 
 ## 🖼️ App Screenshots 🖼️
@@ -45,22 +45,25 @@ This app is designed for librarians and secretaries for streamlined book managem
 ## 🔧 Installation 🔧
 
 1. Clone the repository:
-   git clone (REPOSITORY_URL)
+   git clone (https://github.com/MohammadSatel/project.git)
 
-2. Create virtual enviroment:
-   git clone (requirements.txt)
+2. Create a virtual enviroment:
+   py -m venv (virtual enviroment name)
+   
+3. Activate the virtual enviroment:
+   (virtual enviroment name)\Scripts\activate.bat
 
-3. Activate virtual enviroment:
-   git clone (requirements.txt)
+4. Install needed packages (requirements.txt):
+   pip install to-requirements.txt
 
-4. Install packages:
-   git clone (requirements.txt)
+5. Go to the main app path:
+   (your path)/project
+   
+6. run the main app:
+   py app.py (your path/project/app.py)
 
-5. run main app:
-   py app.py (path cd/project/app.py)
-
-6. Connect to the server:
+7. Connect to the server:
    Running on (http://127.0.0.1:5000)
 
-7. Enjoy the full stack book library application
+8. Enjoy the full stack book library app
 
