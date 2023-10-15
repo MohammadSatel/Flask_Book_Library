@@ -1,8 +1,8 @@
 # 📚 Book Library App 📚
 
-A full stack Python application for efficiently managing a book library.
-This app is designed for librarians and secretaries for streamlined book management.
-Feel free to use this app as you wish
+Python full stack book library application. 
+Full modularity, each entity has its own files (forms.py, models.py, views.py, HTML, CSS, JS)
+
 
 ## 🚀 Features 🚀
 
@@ -37,10 +37,6 @@ Feel free to use this app as you wish
   - SQL
   - SQLAlchemy
 
-## 🖼️ App Screenshots 🖼️
-
-![Screenshot 1](screenshots/screenshot1.png)
-![Screenshot 2](screenshots/screenshot2.png)
 
 ## 🔧 Installation 🔧
 

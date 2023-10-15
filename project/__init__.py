@@ -2,15 +2,14 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+import logging
 
 
-# DATABASE SETUP
+# Database Setup
 app = Flask(__name__)
-
 
 app.config['SECRET_KEY'] = 'supersecret' #to allow us to use forms, not safe for deployment
 app.config["TEMPLATES_AUTO_RELOAD"] = True
-
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+os.path.join(basedir, 'data.sqlite')
@@ -20,7 +19,7 @@ db = SQLAlchemy(app)
 Migrate(app, db)
 
 
-# REGISTER BLUEPRINTS
+# Register Blueprints
 from project.core.views import core
 from project.books.views import books
 from project.customers.views import customers
