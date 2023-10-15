@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 {% block content %}
 
 
@@ -50,6 +49,7 @@
     </table>
 </div>
 
+
 <!-- Add Book Modal -->
 <div class="modal fade" id="addBookModal" tabindex="-1" role="dialog" aria-labelledby="addBookModalLabel"
     aria-hidden="true">
@@ -92,7 +92,6 @@
         </div>
     </div>
 </div>
-
 
 
 <!-- Edit Book Modal -->
@@ -139,10 +138,11 @@
     </div>
 </div>
 
+
 <!-- Include Axios -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-<!-- Include your custom JavaScript (books.js) -->
+<!-- Custom JavaScript file (books.js) -->
 <script src="{{ url_for('static', filename='js/books.js') }}"></script>
 
 

@@ -39,6 +39,7 @@ def list_loans():
     # Fetch all loans from the database
     loans = Loan.query.all()
     # Render the loans.html template with the loans
+    print('Loans page accessed')
     return render_template('loans.html', loans=loans, form=CreateLoan())
 
 

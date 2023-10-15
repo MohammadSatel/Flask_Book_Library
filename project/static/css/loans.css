@@ -1,30 +1,55 @@
+/* Seperated CSS file for loans. Adds modularity to the project */
+
 body {
-    background-color: aquamarine;
-    color: blue;
+    background-color: rgb(255, 255, 255);
+    color: rgb(255, 255, 255);
     padding: 20px;
-
+    margin: 20px;
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
+
 h1 {
-    background-color: brown;
-    color: yellowgreen;
-}
-/* Add any custom CSS styles you want to apply */
-body {
-    padding-top: 20px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(255, 255, 255);
+    padding: 20px;
+    margin: 20px;
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-/* Optional: Add styles for your form or customize as needed */
+p {
+    background-color: rgb(255, 255, 255);
+    color: rgb(255, 255, 255);
+    padding: 20px;
+    margin: 20px;
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
 .form-group {
-    margin-bottom: 1rem;
+    background-color: rgb(255, 255, 255);
+    color: rgb(255, 255, 255);
+    padding: 20px;
+    margin: 20px;
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-/* Optional: Add styles for the table or customize as needed */
 .table {
-    margin-bottom: 1rem;
+    background-color: rgb(255, 255, 255);
+    color: rgb(255, 255, 255);
+    padding: 20px;
+    margin: 20px;
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-/* Optional: Add styles for buttons or customize as needed */
 .btn {
-    margin-right: 5px;
-
+    background-color: rgb(255, 255, 255);
+    color: rgb(255, 255, 255);
+    padding: 20px;
+    margin: 20px;
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
