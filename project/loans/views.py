@@ -130,45 +130,6 @@ def get_customer_details(customer_name):
         return jsonify({'error': 'Customer not found'}), 404
 
 
-# Route to end a loan
-@loans.route('/end/<int:loan_id>', methods=['POST'])
-def end_loan(loan_id):
-    # Find the loan by ID
-    loan = Loan.query.get(loan_id)
-
-    if not loan:
-        print('Loan not found')
-        return jsonify({'error': 'Loan not found'}), 404
-
-    # Check if the loan is active
-    if loan.status == 'ended':
-        return jsonify({'error': 'Loan already ended.'}), 400
-
-    # Retrieve the book associated with the loan
-    book = Book.query.filter_by(name=loan.book_name).first()
-
-    if not book:
-        print('Book not found')
-        return jsonify({'error': 'Book not found'}), 404
-
-    try:
-        # Update loan status to 'ended'
-        loan.status = 'ended'
-        db.session.commit()
-
-        # Update book status to 'available'
-        book.status = 'available'
-        db.session.commit()
-
-        # Redirect to the list of loans
-        return redirect(url_for('loans.list_loans'))
-    except Exception as e:
-        db.session.rollback()
-        error_message = f'Error ending loan: {str(e)}'
-        print('Error ending loan:', error_message)  # Log the error message
-        return jsonify({'error': error_message}), 500
-
-
 # Route to delete a loan
 @loans.route('/<int:loan_id>/delete', methods=['POST'])
 def delete_loan(loan_id):

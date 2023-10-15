@@ -139,4 +139,3 @@ def get_book_details(book_name):
         else:
             print('Book not found')
             return jsonify({'error': 'Book not found'}), 404
-        

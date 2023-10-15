@@ -1,5 +1,4 @@
 from project import db , app
-from datetime import datetime
 
 
 # Loan model

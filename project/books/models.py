@@ -7,9 +7,9 @@ class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True, index=True)
     author = db.Column(db.String(64))
-    year_published = db.Column(db.Integer)  # New field for year published
-    book_type = db.Column(db.String(20))  # Update to store book type as a string
-    status = db.Column(db.String(20), default='available')  # Add a status field
+    year_published = db.Column(db.Integer) 
+    book_type = db.Column(db.String(20))
+    status = db.Column(db.String(20), default='available')
 
     def __init__(self, name, author, year_published, book_type, status='available'):
         self.name = name
