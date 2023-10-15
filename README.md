@@ -42,20 +42,20 @@
 ## 🔧 Installation 🔧
 
 1. Clone the repository:
-   git clone (https://github.com/MohammadSatel/project.git)
+   git clone (https://github.com/MohammadSatel/Flask_Book_Library.git)
 
-2. Create a virtual enviroment:
+2. Go to the main app path:
+   (your path)/Flask_Book_Library
+
+3. Create a virtual enviroment:
    py -m venv (virtual enviroment name)
    
-3. Activate the virtual enviroment:
+4. Activate the virtual enviroment:
    (virtual enviroment name)\Scripts\activate.bat
 
-4. Install needed packages (requirements.txt):
-   pip install to-requirements.txt
+5. Install needed packages: 
+   pip install -r requirements.txt
 
-5. Go to the main app path:
-   (your path)/project
-   
 6. run the main app:
    py app.py (your path/project/app.py)
 

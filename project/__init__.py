@@ -2,13 +2,12 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-import logging
 
 
 # Database Setup
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = 'supersecret' #to allow us to use forms, not safe for deployment
+app.config['SECRET_KEY'] = 'supersecret' # To allow us to use forms
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 basedir = os.path.abspath(os.path.dirname(__file__))

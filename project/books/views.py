@@ -70,7 +70,7 @@ def edit_book(book_id):
         
         # Commit the changes to the database
         db.session.commit()
-        print('Book updated successfully')
+        print('Book edited successfully')
         return jsonify({'message': 'Book updated successfully'})
     except Exception as e:
         # Handle any exceptions
