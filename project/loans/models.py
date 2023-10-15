@@ -2,6 +2,7 @@ from project import db , app
 from datetime import datetime
 
 
+# Loan model
 class Loan(db.Model):
     __tablename__ = 'Loans'
 
