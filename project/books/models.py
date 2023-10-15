@@ -1,5 +1,7 @@
 from project import db, app
 
+
+# Book model
 class Book(db.Model):
     __tablename__ = 'books'
     id = db.Column(db.Integer, primary_key=True)
