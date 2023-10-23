@@ -51,7 +51,7 @@
    py -m venv (virtual enviroment name)
    
 4. Activate the virtual enviroment:
-   (virtual enviroment name)\Scripts\activate.bat
+   (virtual enviroment name)\Scripts\activate
 
 5. Install needed packages: 
    pip install -r requirements.txt
