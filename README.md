@@ -57,10 +57,10 @@
    pip install -r requirements.txt
 
 6. run the main app:
-   py app.py (your path/project/app.py)
+   py app.py (your path/Flask_Book_Library/app.py)
 
 7. Connect to the server:
    Running on (http://127.0.0.1:5000)
 
-8. Enjoy the full stack book library app
+8. Enjoy the full stack book library app with CRUD and DB.
 
